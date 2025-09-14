@@ -1,3 +1,5 @@
+import { authGuard } from '@/core/guards/auth-guard';
+import { Login } from '@/modules/auth/login/login';
 import { Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
 import { Dashboard } from './app/pages/dashboard/dashboard';
@@ -7,6 +9,11 @@ import { Notfound } from './app/pages/notfound/notfound';
 
 export const appRoutes: Routes = [
     {
+        path: 'auth/login', 
+        component: Login,
+    },
+    {
+        canMatch: [authGuard],
         path: '',
         component: AppLayout,
         children: [

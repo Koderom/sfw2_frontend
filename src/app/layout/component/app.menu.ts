@@ -25,6 +25,12 @@ export class AppMenu {
                 items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
             },
             {
+                label: 'Pacientes',
+                items: [
+                    { label: 'Gestionar Pacientes', icon: 'pi pi-fw pi-sitemap', routerLink: ['/pacientes'] }
+                ]                
+            },
+            {
                 label: 'UI Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },

@@ -1,0 +1,168 @@
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="Nuevo Paciente" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()"/>
+        <p-button severity="secondary" label="Eliminar" icon="pi pi-trash" outlined/>
+    </ng-template>
+
+    <ng-template #end>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary"/>
+    </ng-template>
+</p-toolbar>
+
+<p-table
+    #dt
+    [value]="pacientes()"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="['nombre', 'telefono', 'numero_doc', 'email']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selectedPacientes"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="mostrando {first} a {last} de {totalRecords} pacientes"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Lista de Pacientes Registrados</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox />
+            </th>
+            <th pSortableColumn="nombre" style="min-width: 16rem">Nombre
+                <p-sortIcon field="nombre" />
+            </th>
+            <th pSortableColumn="numero_doc" style="min-width: 12rem">CI
+                <p-sortIcon field="numero_doc" />
+            </th>
+            <th pSortableColumn="fecha_nacimiento" style="min-width: 12rem">Fecha Nacimiento
+                <p-sortIcon field="fecha_nacimiento" />
+            </th>
+            <th pSortableColumn="email" style="min-width: 16rem">Correo
+                <p-sortIcon field="email" />
+            </th>
+            <th pSortableColumn="telefono" style="min-width: 12rem">Teléfono
+                <p-sortIcon field="telefono" />
+            </th>
+            <th style="min-width: 12rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-paciente>
+        <tr>
+            <td style="width: 3rem">
+                <p-tableCheckbox [value]="paciente" />
+            </td>
+            <td>{{ paciente.nombre }}</td>
+            <td>{{ paciente.numero_doc }}</td>
+            <td>{{ paciente.fecha_nacimiento | date:'dd/MM/yyyy' }}</td>
+            <td>{{ paciente.email }}</td>
+            <td>{{ paciente.telefono }}</td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(paciente)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(paciente)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="pacienteDialog" [style]="{ width: '450px' }" header="Datos del Paciente" [modal]="true">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <div>
+                <label for="name" class="block font-bold mb-3">Nombre</label>
+                <input type="text" pInputText id="name" [(ngModel)]="paciente.nombre" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !paciente.nombre">Name is required.</small>
+            </div>
+
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-6">
+                    <label for="numero_doc" class="block font-bold mb-3">CI</label>
+                    <input type="text" pInputText id="numero_doc" [(ngModel)]="paciente.numero_doc" />
+                </div>
+                <div class="col-span-6">
+                    <label for="telefono" class="block font-bold mb-3">Telefono</label>
+                    <p-inputnumber id="telefono" [(ngModel)]="paciente.telefono" [useGrouping]="false" fluid />
+                </div>
+            </div>
+
+            <div>
+                <label for="fecha_nacimiento" class="block font-bold mb-3">Fecha de Nacimiento</label>
+                <p-datepicker 
+                    [(ngModel)]="paciente.fecha_nacimiento" 
+                    [iconDisplay]="'input'" 
+                    [showIcon]="true" 
+                    inputId="fecha_nacimiento"
+                    appendTo="body" />
+            </div>
+
+            <div>
+                <label for="genero" class="block font-bold mb-3">Genero</label>
+                <p-select [(ngModel)]="paciente.genero" inputId="genero" [options]="generos" optionLabel="label" optionValue="value" placeholder="seleccionar genero" fluid />
+            </div>
+
+            <div>
+                <label for="email" class="block font-bold mb-3">Correo Electronico</label>
+                <input type="text" pInputText id="email" [(ngModel)]="paciente.email" required autofocus fluid />
+            </div>
+
+            <div>
+                <p-checkbox
+                    inputId="has_whatsapp" 
+                    [(ngModel)]="paciente.tiene_whatsapp" 
+                    [binary]="true" class="mr-2"></p-checkbox>
+                <label for="has_whatsapp" >Tiene whatsApp</label>
+            </div>
+
+            <div>
+                <label  class="block font-bold mb-3">Ubicacion del paciente</label>
+                <google-map 
+                    height="15rem"
+                    width="100%"
+                    [center]="center" 
+                    [zoom]="zoom"
+                    [options]="mapOptions"
+                    (mapClick)="addMarker($event)">
+                    <!-- <map-marker *ngFor="let marker of markers" [position]="marker"></map-marker> -->
+                     <map-marker [position]="marker()"></map-marker>
+                </google-map>
+            </div>
+
+            <div>
+                <label for="direccion" class="block font-bold mb-3">Direccion</label>
+                <input type="text" pInputText id="direccion" [(ngModel)]="direccion.descripcion" required autofocus fluid />
+            </div>
+
+            <div class="grid grid-cols-12 gap-4">
+                <div  class="col-span-6">
+                    <label for="zona_uv" class="block font-bold mb-3">Genero</label>
+                    <p-select 
+                        [(ngModel)]="direccion.idMza" 
+                        inputId="zona_uv" 
+                        [options]="zonasUv()" 
+                        optionLabel="descripcion" 
+                        optionValue="id" 
+                        placeholder="Seleccione una zona UV" fluid />
+                </div>
+                <div class="col-span-6">
+                    <label for="zona_mz" class="block font-bold mb-3">Manzano</label>
+                    <p-inputnumber id="zona_mz" [useGrouping]="false" fluid />
+                </div>
+            </div>
+        </div> 
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
+        <p-button label="Save" icon="pi pi-check" (click)="savePaciente()" />
+    </ng-template>
+</p-dialog>
+

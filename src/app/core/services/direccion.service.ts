@@ -5,6 +5,8 @@ import { Observable } from "rxjs";
 import { ResponseDto } from "@/core/dtos/response.dto";
 import { PacienteDto } from "@/core/dtos/paciente.dto";
 import { ZonaUvDto } from "../dtos/zonaUv.dto";
+import { ZonaMzDto } from "../dtos/zonaMz.dto";
+import { DireccionDto } from "../dtos/direccion.dto";
 
 @Injectable({providedIn: 'root'})
 export class DireccionSerivce{
@@ -18,16 +20,19 @@ export class DireccionSerivce{
         return this.http.get<ResponseDto<ZonaUvDto[]>>(url);
     }
 
-    // crearPaciente(paciente: PacienteDto): Observable<ResponseDto<PacienteDto>> {
-    //     const url = `${this.apiUrl}/paciente`;
-    //     const httpOptions = {
-    //         headers: new HttpHeaders({'Content-Type': 'application/json'})
-    //     };
-    //     return this.http.post<any>(url, paciente, httpOptions);
-    // }
+    getZonasMzByUv(zonaUvId : string): Observable<ResponseDto<ZonaMzDto[]>>{
+        const url = `${this.apiUrl}/direccion/zona-mza/uv/${zonaUvId}`;
+        return this.http.get<ResponseDto<ZonaMzDto[]>>(url);
+    }
 
-    // getAllPacientes(): Observable<ResponseDto<PacienteDto[]>> {
-    //     const url = `${this.apiUrl}/paciente`;
-    //     return this.http.get<ResponseDto<PacienteDto[]>>(url);
-    // }
+    crearDireccionPacinete(direccion: DireccionDto): Observable<ResponseDto<DireccionDto[]>>{
+        console.log("creando direccion")
+        console.log(direccion);
+
+        const url = `${this.apiUrl}/direccion`;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        return this.http.post<ResponseDto<DireccionDto[]>>(url, direccion, httpOptions);
+    }
 }

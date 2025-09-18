@@ -1,5 +1,5 @@
 import { PacienteDto } from '@/core/dtos/paciente.dto';
-import { Component, Inject, inject, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { RatingModule } from 'primeng/rating';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { SelectModule } from 'primeng/select';
+import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
@@ -30,33 +30,18 @@ import {MapGeocoder} from '@angular/google-maps';
 import { DireccionDto } from '@/core/dtos/direccion.dto';
 import { ZonaUvDto } from '@/core/dtos/zonaUv.dto';
 import { DireccionSerivce } from '@/core/services/direccion.service';
+import { CentrosaludCaniadaDelCarmen } from '@/core/utils/location/constants';
+import { ZonaMzDto } from '@/core/dtos/zonaMz.dto';
+import { switchMap, tap } from 'rxjs';
 
 
 @Component({
   selector: 'app-paciente',
   imports: [
-    CommonModule,
-    TableModule,
-    FormsModule,
-    ButtonModule,
-    RippleModule,
-    ToastModule,
-    ToolbarModule,
-    RatingModule,
-    InputTextModule,
-    TextareaModule,
-    SelectModule,
-    RadioButtonModule,
-    InputNumberModule,
-    DialogModule,
-    TagModule,
-    InputIconModule,
-    IconFieldModule,
-    ConfirmDialogModule,
-    DatePickerModule,
-    CheckboxModule,
-    GoogleMap, MapMarker
-  ],
+    CommonModule,TableModule,FormsModule,ButtonModule,RippleModule,ToastModule,ToolbarModule,
+    RatingModule,InputTextModule,TextareaModule,SelectModule,RadioButtonModule,InputNumberModule,
+    DialogModule,TagModule,InputIconModule,IconFieldModule,ConfirmDialogModule,DatePickerModule,
+    CheckboxModule,GoogleMap, MapMarker],
   templateUrl: './paciente.html',
   styleUrl: './paciente.scss',
   providers: [MessageService]
@@ -70,6 +55,7 @@ export class Paciente {
 
   pacientes = signal<PacienteDto[]>([]);
   zonasUv = signal<ZonaUvDto[]>([]);
+  zonasMz = signal<ZonaMzDto[]>([]);
   selectedPacientes!: PacienteDto[] | null;
 
   submitted: boolean = false;
@@ -80,7 +66,7 @@ export class Paciente {
   @ViewChild('dt') dt!: Table;
 
   //MAP
-  center: google.maps.LatLngLiteral = {lat: -17.8101551, lng: -63.1534107};
+  center: google.maps.LatLngLiteral = CentrosaludCaniadaDelCarmen;
   
   mapOptions: google.maps.MapOptions = {
     disableDefaultUI: true, 
@@ -90,7 +76,7 @@ export class Paciente {
   };
 
   zoom = 18;
-  marker = signal<google.maps.LatLngLiteral>({lat: -17.8101551, lng: -63.1534107})
+  marker = signal<google.maps.LatLngLiteral>(CentrosaludCaniadaDelCarmen)
 
   constructor(private service: MessageService, private geocoder: MapGeocoder) {}
 
@@ -131,6 +117,7 @@ export class Paciente {
     };
     this.resetDireccion();
     this.loadZonasUv()
+    this.loadMyLocation()
     
     this.submitted = false;
     this.pacienteDialog = true;
@@ -145,26 +132,43 @@ export class Paciente {
       this.submitted = true;
       let _pacientes = this.pacientes();
 
+      console.log(this.paciente);
+      console.log(this.direccion);
+
       if(this.paciente.id){
           //TODO: implementar actualizar paciente paciente
           console.log("creando paciente")
       }else{
-        this._pacienteSevice.crearPaciente(this.paciente).subscribe(
-          response => {
-            console.log(response);
-            this.service.add({ severity: 'success', summary: 'Registrado', detail: `Paciente: ${response.data.nombre}, ${response.message}`});
-          },
-          error => {
-            console.log(error);
-            this.service.add({ severity: 'error', summary: "Error" , detail: 'Error al registrar al paciente' });
+        this._pacienteSevice.crearPaciente(this.paciente).pipe(
+          tap(paciente => console.log(paciente)),
+          switchMap((result) => {
+            console.log(this.direccion);
+            this.direccion.idPaciente = result.data.id;
+            return this._direccionService.crearDireccionPacinete(this.direccion);
+          })
+
+        ).subscribe({
+            next: (result:any) => {
+              console.log(result);
+              this.closeDialog();
+              this.loadData();
+            },
+            error: (error: any) => {
+                console.log(error);
+            }
           }
-        );
+        )
       }
 
 
-      this.submitted = true;
-      this.pacienteDialog = false;
-      this.paciente = {};
+      
+  }
+
+  closeDialog(){
+    this.submitted = true;
+    this.pacienteDialog = false;
+    this.paciente = {};
+    this.direccion = {};
   }
 
   editProduct(paciente: PacienteDto) {
@@ -186,9 +190,12 @@ export class Paciente {
 
     this.direccion.latitud = latLng.lat;
     this.direccion.longitud = latLng.lng;
+    this.loadDireccionDescripcion(latLng)
+  }
 
+  loadDireccionDescripcion(position: google.maps.LatLngLiteral){
     if (this.geocoder) {
-      this.geocoder.geocode({ location: latLng }).subscribe(
+      this.geocoder.geocode({ location: position }).subscribe(
         ({results}) => this.direccion.descripcion = results[1].formatted_address
       );
     }
@@ -206,5 +213,37 @@ export class Paciente {
         this.zonasUv.set(resp.data);
       }
     });
+  }
+  
+  onZonaUvChange(event :  SelectChangeEvent){
+    this.loadZonaMz(event.value);
+  }
+
+  loadZonaMz(zonaMzId: string){
+    this._direccionService.getZonasMzByUv(zonaMzId).subscribe({
+      next: (resp) => {
+        this.zonasMz.set(resp.data);
+      }
+    });
+  }
+
+  loadMyLocation(){
+    let currentPosition = CentrosaludCaniadaDelCarmen
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition( (position) => {
+        currentPosition = {lat: position.coords.latitude, lng: position.coords.longitude}
+
+        this.center = currentPosition;
+        this.marker.set(currentPosition);
+        this.loadDireccionDescripcion(currentPosition);
+      });
+    }else{
+      this.center = currentPosition;
+      this.marker.set(currentPosition);
+      this.loadDireccionDescripcion(currentPosition);
+    }
+
+    this.direccion.latitud = currentPosition.lat;
+    this.direccion.longitud = currentPosition.lng;
   }
 }

@@ -15,7 +15,7 @@ export class PacienteService{
         const httpOptions = {
             headers: new HttpHeaders({'Content-Type': 'application/json'})
         };
-        return this.http.post<any>(url, paciente, httpOptions);
+        return this.http.post<ResponseDto<PacienteDto>>(url, paciente, httpOptions);
     }
 
     getAllPacientes(): Observable<ResponseDto<PacienteDto[]>> {

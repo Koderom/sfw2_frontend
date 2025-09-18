@@ -83,12 +83,12 @@
                 <small class="text-red-500" *ngIf="submitted && !paciente.nombre">Name is required.</small>
             </div>
 
-            <div class="grid grid-cols-12 gap-4">
-                <div class="col-span-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div class="md:col-span-6">
                     <label for="numero_doc" class="block font-bold mb-3">CI</label>
                     <input type="text" pInputText id="numero_doc" [(ngModel)]="paciente.numero_doc" />
                 </div>
-                <div class="col-span-6">
+                <div class="md:col-span-6">
                     <label for="telefono" class="block font-bold mb-3">Telefono</label>
                     <p-inputnumber id="telefono" [(ngModel)]="paciente.telefono" [useGrouping]="false" fluid />
                 </div>
@@ -135,26 +135,40 @@
                      <map-marker [position]="marker()"></map-marker>
                 </google-map>
             </div>
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                <div class="md:col-span-4">
+                    <label for="direccion" class="block font-bold mb-3">Direccion</label>
+                    <input type="text" pInputText id="direccion" [(ngModel)]="direccion.descripcion" required autofocus fluid />
+                </div>
 
-            <div>
-                <label for="direccion" class="block font-bold mb-3">Direccion</label>
-                <input type="text" pInputText id="direccion" [(ngModel)]="direccion.descripcion" required autofocus fluid />
+                <div class="md:col-span-2">
+                    <label for="nro_casa" class="block font-bold mb-3">Nro Casa</label>
+                    <p-inputnumber id="nro_casa" [(ngModel)]="direccion.nro_casa" [useGrouping]="false" fluid />
+                </div>
             </div>
+            
 
             <div class="grid grid-cols-12 gap-4">
-                <div  class="col-span-6">
-                    <label for="zona_uv" class="block font-bold mb-3">Genero</label>
-                    <p-select 
-                        [(ngModel)]="direccion.idMza" 
+                <div  class="col-span-12">
+                    <label for="zona_uv" class="block font-bold mb-3">Zona UV</label>
+                    <p-select
                         inputId="zona_uv" 
                         [options]="zonasUv()" 
                         optionLabel="descripcion" 
                         optionValue="id" 
+                        (onChange)="onZonaUvChange($event)"
                         placeholder="Seleccione una zona UV" fluid />
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-12">
                     <label for="zona_mz" class="block font-bold mb-3">Manzano</label>
-                    <p-inputnumber id="zona_mz" [useGrouping]="false" fluid />
+                    <p-select
+                        [(ngModel)]="direccion.idMza"
+                        inputId="zona_mz" 
+                        [options]="zonasMz()" 
+                        optionLabel="descripcion" 
+                        optionValue="id"
+                        class="w-full"
+                        placeholder="Seleccione una zona Mz" fluid />
                 </div>
             </div>
         </div> 

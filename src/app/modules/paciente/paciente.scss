@@ -1,0 +1,7 @@
+/* Estilos para el dropdown de PrimeNG */
+.select-manzano .p-dropdown-item {
+  white-space: normal !important;  /* Permite que el texto haga wrap */
+  word-break: break-word;          /* Rompe palabras largas si es necesario */
+  line-height: 1.3;                /* Mejora la legibilidad */
+  padding: 0.5rem 1rem;           /* Espaciado más cómodo */
+}

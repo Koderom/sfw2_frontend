@@ -33,6 +33,7 @@ import { DireccionSerivce } from '@/core/services/direccion.service';
 import { CentrosaludCaniadaDelCarmen } from '@/core/utils/location/constants';
 import { ZonaMzDto } from '@/core/dtos/zonaMz.dto';
 import { switchMap, tap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -47,6 +48,8 @@ import { switchMap, tap } from 'rxjs';
   providers: [MessageService]
 })
 export class Paciente {
+  _router = inject(Router);
+  _route = inject(ActivatedRoute);
   _pacienteSevice = inject(PacienteService);
   _direccionService = inject(DireccionSerivce);
 
@@ -171,9 +174,10 @@ export class Paciente {
     this.direccion = {};
   }
 
-  editProduct(paciente: PacienteDto) {
-      this.paciente = { ...paciente };
-      this.pacienteDialog = true;
+  editPaciente(paciente: PacienteDto) {
+    console.log('paciente-detail');
+    console.log(paciente);
+    this._router.navigate(['detail-paciente', paciente.id], {relativeTo: this._route});
   }
 
   deleteProduct(paciente: PacienteDto){

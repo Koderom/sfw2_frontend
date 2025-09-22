@@ -25,6 +25,11 @@ export class DireccionSerivce{
         return this.http.get<ResponseDto<ZonaMzDto[]>>(url);
     }
 
+    getZonaMzById(zonaMzId : string): Observable<ResponseDto<ZonaMzDto>>{
+        const url = `${this.apiUrl}/direccion/zona-mza/${zonaMzId}`;
+        return this.http.get<ResponseDto<ZonaMzDto>>(url);
+    }
+
     crearDireccionPacinete(direccion: DireccionDto): Observable<ResponseDto<DireccionDto[]>>{
         console.log("creando direccion")
         console.log(direccion);
@@ -34,5 +39,16 @@ export class DireccionSerivce{
             headers: new HttpHeaders({'Content-Type': 'application/json'})
         };
         return this.http.post<ResponseDto<DireccionDto[]>>(url, direccion, httpOptions);
+    }
+
+    actualizarDireccionPaciente(direccion: DireccionDto): Observable<ResponseDto<DireccionDto[]>>{
+        console.log("creando direccion")
+        console.log(direccion);
+
+        const url = `${this.apiUrl}/direccion/${direccion.id}`;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        return this.http.put<ResponseDto<DireccionDto[]>>(url, direccion, httpOptions);
     }
 }

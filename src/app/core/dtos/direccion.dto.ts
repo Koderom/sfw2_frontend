@@ -1,4 +1,5 @@
 export interface DireccionDto {
+  id?: string;
   descripcion?: string;
   idPaciente?: string;
   idMza?: string;

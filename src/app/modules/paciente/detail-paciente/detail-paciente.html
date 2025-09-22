@@ -1,0 +1,140 @@
+<p-accordion value="0">
+  <p-accordion-panel value="0">
+    <p-accordion-header>Datos del Paciente</p-accordion-header>
+    <p-accordion-content>
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="md:w-1/2">
+            <p-fieldset legend="Datos Personales">
+              <div class="flex flex-col gap-4 m-2">
+                <div class="flex flex-col gap-2">
+                    <label for="name" class="block font-bold mb-3">Nombre</label>
+                    <input type="text" pInputText id="name" [(ngModel)]="paciente.nombre" required autofocus fluid />
+                    <small class="text-red-500" *ngIf="!paciente.nombre">Name is required.</small>
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label for="numero_doc" class="block font-bold mb-3">CI</label>
+                    <input type="text" pInputText id="numero_doc" [(ngModel)]="paciente.numero_doc" />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="fecha_nacimiento" class="block font-bold mb-3">Fecha de Nacimiento</label>
+                    <p-datepicker 
+                        [(ngModel)]="paciente.fecha_nacimiento" 
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true" 
+                        inputId="fecha_nacimiento"
+                        appendTo="body" />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="genero" class="block font-bold mb-3">Genero</label>
+                    <p-select [(ngModel)]="paciente.genero" inputId="genero" [options]="generos" optionLabel="label" optionValue="value" placeholder="seleccionar genero" fluid />
+                </div>
+              </div>
+            </p-fieldset>
+
+            <p-fieldset legend="Datos de contacto">
+              <div class="flex flex-col gap-4 m-2">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                  <div class="md:col-span-4">
+                    <label for="telefono" class="block font-bold mb-3">Telefono</label>
+                    <p-inputnumber id="telefono" [(ngModel)]="paciente.telefono" [useGrouping]="false" fluid />
+                  </div>
+                  <div class="md:col-span-8">
+                    <label for="email" class="block font-bold mb-3">Correo Electronico</label>
+                    <input type="text" pInputText id="email" [(ngModel)]="paciente.email" required autofocus fluid />
+                  </div>
+                </div>
+                <div>
+                  <p-checkbox inputId="has_whatsapp" [(ngModel)]="paciente.tiene_whatsapp" [binary]="true" class="mr-2"></p-checkbox>
+                  <label for="has_whatsapp">Tiene whatsApp</label>
+                </div>
+              </div>
+            </p-fieldset>
+        </div>
+        <div class="md:w-1/2">
+            <p-fieldset legend="Datos de Ubicación">
+              <div class="flex flex-col gap-4 m-2">
+                <div class="flex flex-col gap-4">
+                  <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                    <div class="md:col-span-4">
+                      <label for="direccion" class="block font-bold mb-3">Direccion</label>
+                      <input type="text" pInputText id="direccion" [(ngModel)]="direccion.descripcion" required autofocus fluid />
+                    </div>
+
+                    <div class="md:col-span-2">
+                      <label for="nro_casa" class="block font-bold mb-3">Nro Casa</label>
+                      <p-inputnumber id="nro_casa" [(ngModel)]="direccion.nro_casa" [useGrouping]="false" fluid />
+                    </div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-12 gap-4">
+                  <div class="col-span-12">
+                    <label for="zona_uv" class="block font-bold mb-3">Zona UV</label>
+                  <p-select [(ngModel)]="selectedZonaUvId" inputId="zona_uv" [options]="zonasUv()" optionLabel="descripcion" optionValue="id" (onChange)="onZonaUvChange($event)" placeholder="Seleccione una zona UV" fluid />
+                  </div>
+                  <div class="col-span-12">
+                    <label for="zona_mz" class="block font-bold mb-3">Manzano</label>
+                    <p-select [(ngModel)]="selectedZonaMzId" inputId="zona_mz" [options]="zonasMz()" optionLabel="descripcion" optionValue="id" class="w-full" placeholder="Seleccione una zona Mz" fluid />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block font-bold mb-3">Ubicacion del paciente</label>
+                  <google-map height="20rem" width="100%" [center]="center" [zoom]="zoom" [options]="mapOptions" (mapClick)="addMarker($event)">
+                    <!-- <map-marker *ngFor="let marker of markers" [position]="marker"></map-marker> -->
+                    <map-marker [position]="marker()"></map-marker>
+                  </google-map>
+                </div>
+              </div>
+
+            </p-fieldset>
+
+          <div class="card flex flex-col gap-4">
+
+          </div>
+        </div>
+      </div>
+        <div class="md:w-1/1 flex justify-end my-4">  
+            <p-button label="Cancel" icon="pi pi-times" text  />
+            <p-button label="Save" icon="pi pi-check" (click)="savePaciente()" />
+        </div>
+    </p-accordion-content>
+  </p-accordion-panel>
+</p-accordion>
+
+<p-fluid>
+
+
+  <div class="flex mt-8">
+    <div class="card flex flex-col gap-6 w-full">
+      <div class="font-semibold text-xl">Contactos Personales</div>
+      <div class="flex flex-col md:flex-row gap-6">
+        <div class="flex flex-wrap gap-2 w-full">
+          <label for="firstname2">Firstname</label>
+          <input pInputText id="firstname2" type="text" />
+        </div>
+        <div class="flex flex-wrap gap-2 w-full">
+          <label for="lastname2">Lastname</label>
+          <input pInputText id="lastname2" type="text" />
+        </div>
+      </div>
+
+      <div class="flex flex-wrap">
+        <label for="address">Address</label>
+        <textarea pTextarea id="address" rows="4"></textarea>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-6">
+        <div class="flex flex-wrap gap-2 w-full">
+          <label for="state">State</label>
+          <p-select id="state" [(ngModel)]="dropdownItem" [options]="dropdownItems" optionLabel="name" placeholder="Select One" class="w-full"></p-select>
+        </div>
+        <div class="flex flex-wrap gap-2 w-full">
+          <label for="zip">Zip</label>
+          <input pInputText id="zip" type="text" />
+        </div>
+      </div>
+    </div>
+  </div>
+</p-fluid>

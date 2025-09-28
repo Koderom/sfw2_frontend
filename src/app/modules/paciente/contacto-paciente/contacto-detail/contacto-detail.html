@@ -1,0 +1,54 @@
+<p-dialog [(visible)]="visible" [style]="{ width: '450px' }" header="Datos del Contacto" [modal]="true" (onShow)="onDialogShow()">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <div>
+                <label for="contacto_name" class="block font-bold mb-3">Nombre</label>
+                <input type="text" pInputText id="contacto_name" [(ngModel)]="contacto.nombre_contacto" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !contacto.nombre_contacto">Name is required.</small>
+            </div>
+            <div >
+                <label for="contacto_parentesco" class="block font-bold mb-3">Parentesco</label>
+                <p-select
+                    inputId="contacto_parentesco" 
+                    [options]="tipoParentescoOptions()" 
+                    optionLabel="descripcion" 
+                    optionValue="id" 
+                    [(ngModel)]="selectedParentescoId"
+                    placeholder="Seleccione una opcion" fluid />
+            </div>
+            <div>
+                <label for="contacto_telefono" class="block font-bold mb-3">Telefono</label>
+                <p-inputnumber id="contacto_telefono" [(ngModel)]="contacto.numero_telefono_contacto" [useGrouping]="false" fluid />
+                <small class="text-red-500" *ngIf="submitted && !contacto.numero_telefono_contacto">Telefono is required.</small>
+            </div>            
+
+            <div>
+                <label for="contacto_direccion" class="block font-bold mb-3">Direccion</label>
+                <input type="text" pInputText id="contacto_direccion" [(ngModel)]="contacto.direccion" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !contacto.direccion">Direccion is required.</small>
+            </div>
+
+            <div>
+                <p-checkbox
+                    inputId="is_contacto_emergencia" 
+                    [(ngModel)]="contacto.emergencia" 
+                    [binary]="true" class="mr-2"></p-checkbox>
+                <label for="is_contacto_emergencia" >Contacto de referencia para emergencias</label>
+            </div>
+
+            <div>
+                <p-checkbox
+                    inputId="contacto_has_whatsapp" 
+                    [(ngModel)]="contacto.tiene_whatsapp" 
+                    [binary]="true" class="mr-2"></p-checkbox>
+                <label for="contacto_has_whatsapp" >Tiene WhatsApp</label>
+            </div>
+        </div> 
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text (click)="onCancel()" />
+        <p-button label="Save" icon="pi pi-check" (click)="onSave()" />
+    </ng-template>
+</p-dialog>
+

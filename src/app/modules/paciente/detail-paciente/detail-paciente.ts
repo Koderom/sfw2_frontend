@@ -22,11 +22,15 @@ import { switchMap, tap } from 'rxjs';
 import { CentrosaludCaniadaDelCarmen } from '@/core/utils/location/constants';
 import {GoogleMap, MapMarker} from '@angular/google-maps';
 import {MapGeocoder} from '@angular/google-maps';
+import { ContactoPaciente } from '../contacto-paciente/contacto-paciente';
+import { Table, TableModule } from 'primeng/table';
+import { ContactoDto } from '@/core/dtos/contacto.dto';
 
 @Component({
   selector: 'app-detail-paciente',
   imports: [CommonModule,InputTextModule, FluidModule, ButtonModule, SelectModule, FormsModule, TextareaModule,
-    AccordionModule, FieldsetModule, DatePickerModule, InputNumberModule, CheckboxModule,GoogleMap, MapMarker],
+    AccordionModule, FieldsetModule, DatePickerModule, InputNumberModule, CheckboxModule,GoogleMap, MapMarker, 
+    ContactoPaciente, TableModule],
   templateUrl: './detail-paciente.html',
   styleUrl: './detail-paciente.scss'
 })
@@ -34,6 +38,7 @@ export class DetailPaciente {
   route = inject(ActivatedRoute);
   router = inject(Router);
   pacienteService = inject(PacienteService);
+  contactosPacinetes = signal<ContactoDto[]>([]);
 
   paciente!: PacienteDto;
   direccion!: DireccionDto;
@@ -78,6 +83,7 @@ export class DetailPaciente {
           switchMap((result) => {
             this.paciente = result.data.paciente!;
             this.paciente.fecha_nacimiento = new Date(this.paciente.fecha_nacimiento!);
+            this.contactosPacinetes.set(result.data.contactos || []);
             if(result.data.direccion){
               this.direccion = result.data.direccion!;
               this.selectedZonaMzId = this.direccion.idMza || '';

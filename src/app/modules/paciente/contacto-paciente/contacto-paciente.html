@@ -1,0 +1,83 @@
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="Agregar contacto" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="newContacto()"/>
+        <p-button severity="secondary" label="Eliminar" icon="pi pi-trash" outlined/>
+    </ng-template>
+
+    <ng-template #end>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary"/>
+    </ng-template>
+</p-toolbar>
+
+<p-table #dt 
+[value]="contactos" 
+[rows]="10" [columns]="cols" 
+[paginator]="true" 
+[globalFilterFields]="['nombre', 'telefono', 'numero_doc', 'email']" 
+[tableStyle]="{ 'min-width': '75rem' }" [(selection)]="selectedContactos" 
+[rowHover]="true" dataKey="id" 
+currentPageReportTemplate="mostrando {first} a {last} de {totalRecords} resultados" 
+[showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 20, 30]">
+
+  <ng-template #caption>
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Lista de Contactos Registrados</h5>
+      <p-iconfield>
+        <p-inputicon styleClass="pi pi-search" />
+        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
+      </p-iconfield>
+    </div>
+  </ng-template>
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox />
+      </th>
+      <th pSortableColumn="nombre" style="min-width: 16rem">Nombre
+        <p-sortIcon field="nombre" />
+      </th>
+      <th pSortableColumn="telefono" style="min-width: 12rem">Parentesco
+        <p-sortIcon field="telefono" />
+      </th>
+      <th pSortableColumn="telefono" style="min-width: 12rem">Telefono
+        <p-sortIcon field="telefono" />
+      </th>
+      <th pSortableColumn="telefono" style="min-width: 12rem">Direccion
+        <p-sortIcon field="telefono" />
+      </th>
+      <th style="min-width: 12rem"></th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-contacto>
+    <tr>
+      <td style="width: 3rem">
+        <p-tableCheckbox [value]="contacto" />
+      </td>
+      <td>
+        {{ contacto.nombre_contacto }}
+      </td>
+      <td>
+        {{ tipoParentesco().get(contacto.tipo_parentesco.id)}}
+      </td>
+      <td>
+        {{ contacto.numero_telefono_contacto }}
+      </td>
+      <td>
+        {{ contacto.direccion}}
+      </td>
+      <td>
+        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (onClick)="editContacto(contacto)"/>
+        <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"/>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<app-contacto-detail
+    [visible]="contactoDialogVisible"
+    [contacto]="contactoSeleccionado"
+    [submitted]="submitted()"
+    (save)="saveContacto()"
+    (cancel)="hideDialog()">
+    
+</app-contacto-detail>

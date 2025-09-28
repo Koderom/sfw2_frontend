@@ -1,3 +1,5 @@
+import { ContactoDto } from "./contacto.dto";
+
 export interface PacienteDto {
     id?: string;
     nombre?: string;
@@ -9,4 +11,5 @@ export interface PacienteDto {
     tiene_whatsapp?: boolean;
     telefono?: number;
     estado?: boolean;
+    contactos?: ContactoDto[];
 }

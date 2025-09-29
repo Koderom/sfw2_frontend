@@ -1,0 +1,79 @@
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="Nuevo Tratamiento" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="newTratamiento()"/>
+        <p-button severity="secondary" label="Eliminar" icon="pi pi-trash" outlined/>
+    </ng-template>
+
+    <ng-template #end>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary"/>
+    </ng-template>
+</p-toolbar>
+
+<p-table
+    #dt
+    [value]="tratamientos()"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="['nombre', 'telefono', 'numero_doc', 'email']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selectedTratamiento"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="mostrando {first} a {last} de {totalRecords} tratamientos"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Lista de Tratamientos Registrados</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox />
+            </th>
+            <th pSortableColumn="nombre" style="min-width: 16rem">Paciente
+                <p-sortIcon field="nombre" />
+            </th>
+            <th pSortableColumn="numero_doc" style="min-width: 12rem">Estado
+                <p-sortIcon field="numero_doc" />
+            </th>
+            <th pSortableColumn="fecha_nacimiento" style="min-width: 12rem">Fecha Inicio
+                <p-sortIcon field="fecha_nacimiento" />
+            </th>
+            <th pSortableColumn="email" style="min-width: 16rem">Fecha Fin
+                <p-sortIcon field="email" />
+            </th>
+            <th style="min-width: 12rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-tratamiento>
+        <tr>
+            <!-- <td style="width: 3rem">
+                <p-tableCheckbox [value]="paciente" />
+            </td>
+            <td>{{ paciente.nombre }}</td>
+            <td>{{ paciente.numero_doc }}</td>
+            <td>{{ paciente.fecha_nacimiento | date:'dd/MM/yyyy' }}</td>
+            <td>{{ paciente.email }}</td>
+            <td>{{ paciente.telefono }}</td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editPaciente(paciente)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(paciente)" />
+            </td> -->
+        </tr>
+    </ng-template>
+</p-table>
+
+<app-detail-tratamiento
+    [visible]="tratamientoDialogVisible"
+    [tratamiento]="tratamientoSeleccionado"
+    [submitted]="submitted()"
+    (save)="saveTratamiento()"
+    (cancel)="hideDialog()">

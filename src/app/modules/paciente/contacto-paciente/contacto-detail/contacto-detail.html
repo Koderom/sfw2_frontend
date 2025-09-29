@@ -1,4 +1,10 @@
-<p-dialog [(visible)]="visible" [style]="{ width: '450px' }" header="Datos del Contacto" [modal]="true" (onShow)="onDialogShow()">
+<p-dialog 
+[(visible)]="visible" 
+[style]="{ width: '450px' }" 
+header="Datos del Contacto" 
+[modal]="true" 
+(onHide)="onCancel()"
+(onShow)="onDialogShow()">
     <ng-template #content>
         <div class="flex flex-col gap-6">
             <div>

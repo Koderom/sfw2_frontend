@@ -21,7 +21,10 @@ export const appRoutes: Routes = [
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
-            { path: 'pacientes', loadChildren: () => import('./app/modules/paciente/paciente.routes')}
+            { path: 'pacientes', loadChildren: () => import('./app/modules/paciente/paciente.routes')},
+            { path: 'tratamientos', loadChildren: () => import('./app/modules/tratamiento/tratamiento.routes')},
+            { path: 'reportes', loadChildren: () => import('./app/modules/reportes/reportes.routes')},
+
         ]
     },
     { path: 'landing', component: Landing },

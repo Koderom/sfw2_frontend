@@ -1,4 +1,5 @@
 import { ContactoDto } from "./contacto.dto";
+import { DireccionDto } from "./direccion.dto";
 
 export interface PacienteDto {
     id?: string;
@@ -12,4 +13,5 @@ export interface PacienteDto {
     telefono?: number;
     estado?: boolean;
     contactos?: ContactoDto[];
+    direccion?: DireccionDto;
 }

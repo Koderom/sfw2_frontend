@@ -185,7 +185,8 @@ export class DetailPaciente {
       switchMap( res => {
         this.direccion.idPaciente = this.paciente.id!;
         this.direccion.idMza = this.selectedZonaMzId
-        return this._direccionService.actualizarDireccionPaciente(this.direccion);
+        if(this.direccion.id) return this._direccionService.actualizarDireccionPaciente(this.direccion);
+        else return this._direccionService.crearDireccionPacinete(this.direccion);
       })
     ).subscribe({
       next: (resp) => {
@@ -213,5 +214,9 @@ export class DetailPaciente {
         ({results}) => this.direccion.descripcion = results[1].formatted_address
       );
     }
+  }
+
+  returnToIndex(){
+    this.router.navigate(['/pacientes']);
   }
 }

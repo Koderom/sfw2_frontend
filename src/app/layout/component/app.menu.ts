@@ -31,6 +31,18 @@ export class AppMenu {
                 ]                
             },
             {
+                label: 'Tratamientos',
+                items: [
+                    { label: 'Gestionar Tratamiento', icon: 'pi pi-fw pi-sitemap', routerLink: ['/tratamientos'] }
+                ]                
+            },
+            {
+                label: 'Reportes',
+                items: [
+                    { label: 'Mapa de Calor', icon: 'pi pi-fw pi-sitemap', routerLink: ['/reportes/mapa-calor'] }
+                ]                
+            },
+            {
                 label: 'UI Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },

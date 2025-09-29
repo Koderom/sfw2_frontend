@@ -1,0 +1,70 @@
+<p-dialog 
+[(visible)]="visible" 
+[style]="{ width: '450px' }" 
+header="Datos del Tratamiento" 
+[modal]="true" 
+(onHide)="onCancel()"
+(onShow)="onDialogShow()">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <div>
+                <label for="tratamiento_paciente" class="block font-bold mb-3">Paciente</label>
+                <p-autocomplete class="w-full" 
+                  [(ngModel)]="selectedPacienteId" 
+                  [suggestions]="filteredPaciente" 
+                  optionLabel="nombre" 
+                  placeholder="Search" 
+                  dropdown display="chip" 
+                  (onSelect) = "onSelectPaciente($event)"
+                  (completeMethod)="filterPaciente($event)" />
+                <small class="text-red-500" *ngIf="submitted && !tratamiento.paciente!.nombre">Name is required.</small>
+            </div>
+
+            <div >
+                <label for="tipo_tratamiento" class="block font-bold mb-3">Tipo de Tratamiento</label>
+                <p-select
+                    inputId="tipo_tratamiento" 
+                    [options]="tipoTratamientoOptions()" 
+                    optionLabel="descripcion" 
+                    optionValue="id" 
+                    [(ngModel)]="selectedTipoTratamientoId"
+                    placeholder="Seleccione una opcion" fluid />
+            </div>
+
+            <div >
+                <label for="estado_tratamiento" class="block font-bold mb-3">Estado del Tratamiento</label>
+                <p-select
+                    inputId="estado_tratamiento" 
+                    [options]="estadoTratamientoOptions()" 
+                    optionLabel="descripcion" 
+                    optionValue="id" 
+                    [(ngModel)]="selectedEstadoTratamientoId"
+                    placeholder="Seleccione una opcion" fluid />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div  class="md:col-span-6">
+                <label for="fecha_inicio" class="block font-bold mb-3">Fecha de Inicio</label>
+                <p-datepicker class="w-full" [(ngModel)]="tratamiento.fecha_inicio" [iconDisplay]="'input'" [showIcon]="true" inputId="fecha_inicio" appendTo="body" />
+              </div>
+
+              <div  class="md:col-span-6">
+                <label for="fecha_final" class="block font-bold mb-3">Fecha de Finalización</label>
+                <p-datepicker class="w-full" [(ngModel)]="tratamiento.fecha_fin" [iconDisplay]="'input'" [showIcon]="true" inputId="fecha_final" appendTo="body" />
+              </div>
+            </div>
+
+            <div>
+              <label for="tratamiento_observaciones" class="block font-bold mb-3">Observaciones</label>
+              <textarea pTextarea class="w-full" [(ngModel)]="tratamiento.observaciones" id="tratamiento_observaciones" rows="4"></textarea>
+            </div>
+
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text (click)="onCancel()" />
+        <p-button label="Save" icon="pi pi-check" (click)="onSave()" />
+    </ng-template>
+</p-dialog>
+

@@ -16,6 +16,16 @@ export class TratamientoSerivce{
     private apiUrl = environment.apiUrl;
     private http = inject(HttpClient);
 
+    getTratamientoById(tratamientoId: string): Observable<ResponseDto<TratamientoDto>>{        
+        const url = `${this.apiUrl}/tratamiento/${tratamientoId}`;
+        return this.http.get<ResponseDto<TratamientoDto>>(url);
+    }
+
+    getAllTratamientos(): Observable<ResponseDto<TratamientoDto[]>>{
+        const url = `${this.apiUrl}/tratamiento`;
+        return this.http.get<ResponseDto<TratamientoDto[]>>(url);
+    }
+
     getAllTipoTratamiento(): Observable<ResponseDto<TipoTratamientoDto[]>>{
         const url = `${this.apiUrl}/tratamiento/tipo-tratamiento`;
         return this.http.get<ResponseDto<TipoTratamientoDto[]>>(url);

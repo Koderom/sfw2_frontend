@@ -17,7 +17,7 @@
     [paginator]="true"
     [globalFilterFields]="['nombre', 'telefono', 'numero_doc', 'email']"
     [tableStyle]="{ 'min-width': '75rem' }"
-    [(selection)]="selectedTratamiento"
+    [(selection)]="selectedTratamientos"
     [rowHover]="true"
     dataKey="id"
     currentPageReportTemplate="mostrando {first} a {last} de {totalRecords} tratamientos"
@@ -41,32 +41,45 @@
             <th pSortableColumn="nombre" style="min-width: 16rem">Paciente
                 <p-sortIcon field="nombre" />
             </th>
-            <th pSortableColumn="numero_doc" style="min-width: 12rem">Estado
+            <th pSortableColumn="numero_doc" style="min-width: 10rem">Tipo
                 <p-sortIcon field="numero_doc" />
             </th>
-            <th pSortableColumn="fecha_nacimiento" style="min-width: 12rem">Fecha Inicio
+            <th pSortableColumn="numero_doc" style="min-width: 10rem">Estado
+                <p-sortIcon field="numero_doc" />
+            </th>
+            <th pSortableColumn="fecha_nacimiento" style="min-width: 10rem">Fecha Inicio
                 <p-sortIcon field="fecha_nacimiento" />
             </th>
-            <th pSortableColumn="email" style="min-width: 16rem">Fecha Fin
+            <th pSortableColumn="email" style="min-width: 10rem">Fecha Fin
                 <p-sortIcon field="email" />
             </th>
-            <th style="min-width: 12rem"></th>
+            <th style="min-width: 15rem"></th>
         </tr>
     </ng-template>
     <ng-template #body let-tratamiento>
         <tr>
-            <!-- <td style="width: 3rem">
-                <p-tableCheckbox [value]="paciente" />
+            <td style="width: 3rem">
+                <p-tableCheckbox [value]="tratamiento" />
             </td>
-            <td>{{ paciente.nombre }}</td>
-            <td>{{ paciente.numero_doc }}</td>
-            <td>{{ paciente.fecha_nacimiento | date:'dd/MM/yyyy' }}</td>
-            <td>{{ paciente.email }}</td>
-            <td>{{ paciente.telefono }}</td>
+            <td>{{ tratamiento.paciente!.nombre }}</td>
+            <td>{{ tratamiento.estado!.descripcion }}</td>
+            <td>{{ tratamiento.tipo_tratamiento!.descripcion }}</td>
+            <td>{{ tratamiento.fecha_inicio  | date:'dd/MM/yyyy'}}</td>
+            <td>{{ tratamiento.fecha_fin  | date:'dd/MM/yyyy'}}</td>
             <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editPaciente(paciente)" />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(paciente)" />
-            </td> -->
+                <p-button 
+                icon="pi pi-plus" 
+                label="Asistencia"
+                (click)="showDialogCita(tratamiento)"
+                severity="info"  class="mr-2" [rounded]="false" [outlined]="true" />
+
+                <p-button 
+                    icon="pi pi-calendar-plus" 
+                    class="mr-2" 
+                    [rounded]="false" 
+                    [outlined]="true"(click)="navigateCitaTratamiento(tratamiento)"/>
+                <!-- <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"/> -->
+            </td>
         </tr>
     </ng-template>
 </p-table>
@@ -74,6 +87,15 @@
 <app-detail-tratamiento
     [visible]="tratamientoDialogVisible"
     [tratamiento]="tratamientoSeleccionado"
-    [submitted]="submitted()"
+    [submitted]="tratamientoSubmitted()"
     (save)="saveTratamiento()"
-    (cancel)="hideDialog()">
+    (cancel)="hideDialog()"/>
+
+<app-detail-cita
+    [visible]="citaDialogVisible"
+    [cita]="citaSelected"
+    [submitted]="citaSubmitted()"
+    [tratamientoId]="tratamientoSeleccionado.id!"
+    (save)="saveCita()"
+    (cancel)="hideDialogCita()"
+></app-detail-cita>

@@ -98,6 +98,8 @@ export class DetailTratamiento {
   onSave(){
     this.tratamiento.idTipoTratamiento = this.selectedTipoTratamientoId;
     this.tratamiento.idEstado = this.selectedEstadoTratamientoId;
+    this.filteredPaciente = [];
+    
     this.save.emit();
   }
 

@@ -1,0 +1,57 @@
+<p-dialog 
+[(visible)]="visible" 
+[style]="{ width: '450px' }" 
+header="Control de citas" 
+[modal]="true" 
+(onHide)="onCancel()"
+(onShow)="onDialogShow()">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+
+            <div >
+                <label for="tipo_cita" class="block font-bold mb-3">Tipo de cita</label>
+                <p-select
+                    inputId="tipo_cita" 
+                    [options]="tipoCitaOptions()" 
+                    optionLabel="descripcion" 
+                    optionValue="id" 
+                    [(ngModel)]="tipoCitaSelected"
+                    placeholder="Seleccione una opcion" fluid />
+            </div>
+
+            <div >
+                <label for="estado_cita" class="block font-bold mb-3">Estado de cita</label>
+                <p-select
+                    inputId="estado_cita" 
+                    [options]="estadoCitaOptions()" 
+                    optionLabel="descripcion" 
+                    optionValue="id" 
+                    [(ngModel)]="estadoCitaSelected"
+                    placeholder="Seleccione una opcion" fluid />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div  class="md:col-span-6">
+                <label for="fecha_programada" class="block font-bold mb-3">Fecha Programación</label>
+                <p-datepicker class="w-full" [(ngModel)]="cita.fecha_programada" [iconDisplay]="'input'" [showIcon]="true" inputId="fecha_programada" appendTo="body" dateFormat="mm-dd-yy" />
+              </div>
+              <div  class="md:col-span-6">
+                <label for="fecha_actual" class="block font-bold mb-3">Fecha de Registro</label>
+                <p-datepicker disabled="true"  [hourFormat]="'24'" [showTime]="true" class="w-full" [(ngModel)]="cita.fecha_actual" [iconDisplay]="'input'" [showIcon]="true" inputId="fecha_actual" appendTo="body"/>
+              </div>
+            </div>
+
+            <div>
+              <label for="cita_observaciones" class="block font-bold mb-3">Observaciones</label>
+              <textarea pTextarea class="w-full" [(ngModel)]="cita.observaciones" id="cita_observaciones" rows="4"></textarea>
+            </div>
+
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text (click)="onCancel()" />
+        <p-button label="Save" icon="pi pi-check" (click)="onSave()" />
+    </ng-template>
+</p-dialog>
+

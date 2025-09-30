@@ -1,1 +1,86 @@
-<p>citas-tratamiento works!</p>
+<p-panel class="w-full h-full">
+    <ng-template #header>
+        <div class="flex items-center gap-2">
+            <span class="font-bold text-xl" >Calendario de Citas: </span>
+            <span class="text-xl">{{tratamiento().paciente!.nombre}}</span>
+        </div>
+    </ng-template>
+  <!-- Navegación de meses -->
+  <div class="flex items-center justify-between mb-4">
+    <p-button
+      icon="pi pi-chevron-left"
+      (onClick)="cambiarMes(-1)"
+      severity="secondary"
+      [rounded]="true"
+      [text]="true">
+    </p-button>
+
+    <div class="flex flex-col items-center">
+      <span class="font-bold text-lg capitalize">{{ nombreMes }}</span>
+      <span class="text-xs mt-1 px-2 py-0.5 rounded-full"
+        [ngClass]="{
+          'bg-green-100 text-green-700': estadoTratamiento === 'Activa'||  estadoTratamiento === 'Completada',
+          'bg-yellow-100 text-yellow-700': estadoTratamiento === 'Abandonada',
+          'bg-red-200 text-red-600': estadoTratamiento === 'Fallida',
+          'bg-blue-200 text-blue-600': estadoTratamiento === 'Transferida'
+        }">
+        {{ estadoTratamiento }}
+      </span>
+    </div>
+
+    <p-button
+      icon="pi pi-chevron-right"
+      (onClick)="cambiarMes(1)"
+      severity="secondary"
+      [rounded]="true"
+      [text]="true">
+    </p-button>
+  </div>
+
+  <!-- Calendario grid -->
+  <div class="grid gap-2 sm:grid-cols-7 grid-cols-1">
+    <p-card
+      *ngFor="let dia of diasDelMes"
+      [ngClass]="{
+        'bg-gray-100 text-gray-400 opacity-60 pointer-events-none': !dia.disponible,
+        'bg-white': dia.disponible,
+        'ring-2 ring-blue-500': esHoy(dia.fecha)
+      }"
+      (click)="addCitaDiaMes(dia.fecha)"
+    >
+      <div class="font-bold text-lg">
+        {{ dia.fecha | date: 'd' }}
+        <span *ngIf="esHoy(dia.fecha)" class="ml-1 inline-block align-middle text-blue-600">●</span>
+      </div>
+
+      <div *ngIf="dia.citas.length === 0" class="text-gray-400 text-sm">
+        {{ dia.disponible ? 'Sin citas' : 'No disponible' }}
+      </div>
+
+      <div *ngFor="let cita of dia.citas" class="rounded">
+        <p-divider class="my-0"/>
+        <span class="block text-sm font-semibold">{{ cita.titulo }}</span>
+        <span class="block text-xs text-gray-600">{{ cita.hora }}</span>
+        <span *ngIf="cita.estado" class="block text-xs font-bold mt-1"
+          [ngClass]="{
+            'text-green-700': cita.estado === 'Programado',
+            'text-red-600': cita.estado === 'Perdido',
+            'text-blue-700': cita.estado !== 'Programado' && cita.estado !== 'Perdido'
+          }"
+        >
+          {{ cita.estado }}
+        </span>
+      </div>
+    </p-card>
+  </div>
+</p-panel>
+
+
+<app-detail-cita
+    [visible]="citaDialogVisible"
+    [cita]="citaSelected"
+    [submitted]="citaSubmitted()"
+    [tratamientoId]="tratamiento().id!"
+    (save)="saveCita()"
+    (cancel)="hideDialogCita()"
+></app-detail-cita>

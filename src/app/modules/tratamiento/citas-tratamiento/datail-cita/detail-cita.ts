@@ -14,20 +14,21 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
+import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { CitaSerivce } from '@/core/services/cita.service';
+import { MotivoDto } from '@/core/dtos/motivo.dto';
+
+const estadoCitaInasistencia = ['Perdido', 'Cancelado'];
 
 @Component({
   selector: 'app-detail-cita',
   imports: [Button, FormsModule, DialogModule, CommonModule, InputTextModule, InputNumberModule, InputIconModule,
-    CheckboxModule, SelectModule,DatePickerModule, IftaLabelModule, TextareaModule
-  ],
+    CheckboxModule, SelectModule,DatePickerModule, IftaLabelModule, TextareaModule],
   templateUrl: './detail-cita.html',
   styleUrl: './detail-cita.scss'
 })
 export class DetailCita {
-
   @Input() visible = false;
   @Input() tratamientoId!: string;
   @Input() submitted = false;
@@ -43,7 +44,11 @@ export class DetailCita {
   tipoCitaSelected: string = '';
 
   estadoCitaOptions = signal<EstadoCitaDto[]>([]);
-  estadoCitaSelected: string = '';
+  estadoCitaSelected: string = '';  
+
+  motivoInasistenciaOptions = signal<MotivoDto[]>([]);
+  motivoSelected: string = '';
+  isInasistencia: boolean = false;
 
   ngOnInit() {
     this.loadtipoCitaOptions();
@@ -53,6 +58,7 @@ export class DetailCita {
   onSave(){
     this.cita.idEstado = this.estadoCitaSelected;
     this.cita.idTipo = this.tipoCitaSelected;
+    this.cita.idMotivo = this.motivoSelected;
     this.save.emit();
   }
 
@@ -96,4 +102,33 @@ export class DetailCita {
       }
     });
   }
+
+  onEstadoCitaChange(event: SelectChangeEvent){
+    let idEstado = event.value;
+    let estado = this.estadoCitaOptions().find(e => e.id === idEstado);
+    if(estado){
+      if(estadoCitaInasistencia.includes(estado.descripcion!)){
+        this.isInasistencia = true;
+
+        this.loadMotivoOptions();
+      }else{
+        this.isInasistencia = false;
+
+        this.motivoInasistenciaOptions.set([]);
+        this.motivoSelected = '';
+      }
+    }
+  }
+
+
+  loadMotivoOptions(){
+    this.citaService.getAllMotivo().subscribe({
+      next: (response) => {
+        if(response.data){
+          this.motivoInasistenciaOptions.set(response.data);
+        }
+      }
+    });
+  }
+  
 }

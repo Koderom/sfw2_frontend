@@ -26,13 +26,25 @@ header="Control de citas"
                     [options]="estadoCitaOptions()" 
                     optionLabel="descripcion" 
                     optionValue="id" 
+                    (onChange)="onEstadoCitaChange($event)"
                     [(ngModel)]="estadoCitaSelected"
+                    placeholder="Seleccione una opcion" fluid />
+            </div>
+
+            <div *ngIf="isInasistencia">
+                <label for="motivo_inasistencia" class="block font-bold mb-3">Motivo de Inasistencia</label>
+                <p-select
+                    inputId="motivo_inasistencia" 
+                    [options]="motivoInasistenciaOptions()" 
+                    optionLabel="descripcion" 
+                    optionValue="id"
+                    [(ngModel)]="motivoSelected"
                     placeholder="Seleccione una opcion" fluid />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
               <div  class="md:col-span-6">
-                <label for="fecha_programada" class="block font-bold mb-3">Fecha Programación</label>
+                <label for="fecha_programada" class="block font-bold mb-3">Fecha Programada</label>
                 <p-datepicker class="w-full" [(ngModel)]="cita.fecha_programada" [iconDisplay]="'input'" [showIcon]="true" inputId="fecha_programada" appendTo="body" dateFormat="mm-dd-yy" />
               </div>
               <div  class="md:col-span-6">

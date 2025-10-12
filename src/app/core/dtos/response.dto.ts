@@ -1,5 +1,5 @@
 export interface ResponseDto<T>{
-    message: string[];
+    message: string;
     error: string;
     statusCode: number;
     data: T;

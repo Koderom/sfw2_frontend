@@ -13,6 +13,7 @@ import { TratamientoDto } from "../dtos/tratamiento.dto";
 import { CitaDto } from "../dtos/cita.dto";
 import { TipoCitaDto } from "../dtos/tipocita.dto";
 import { EstadoCitaDto } from "../dtos/estadocita.dto";
+import { MotivoDto } from "../dtos/motivo.dto";
 
 @Injectable({providedIn: 'root'})
 export class CitaSerivce{
@@ -32,6 +33,11 @@ export class CitaSerivce{
     getAllEstadoCita(): Observable<ResponseDto<EstadoCitaDto[]>>{
         const url = `${this.apiUrl}/cita/estado-cita`;
         return this.http.get<ResponseDto<EstadoCitaDto[]>>(url);
+    }
+
+    getAllMotivo(): Observable<ResponseDto<MotivoDto[]>>{
+        const url = `${this.apiUrl}/cita/motivo`;
+        return this.http.get<ResponseDto<MotivoDto[]>>(url);
     }
 
     crearCitaTratamiento(cita: CitaDto): Observable<ResponseDto<CitaDto>>{

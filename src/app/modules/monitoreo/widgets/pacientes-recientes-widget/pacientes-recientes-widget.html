@@ -1,0 +1,26 @@
+<div class="card mb-8!">
+    <div class="font-semibold text-xl mb-4">Nuevos Pacientes Registrados</div>
+    <p-table [value]="pacientes" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+        <ng-template #header>
+            <tr>
+                <th>CI</th>
+                <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="price">Telefono <p-sortIcon field="price"></p-sortIcon></th>
+                <th>Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-paciente>
+            <tr>
+                <td style="width: 15%; min-width: 5rem;">{{ paciente.numero_doc}} </td>
+                <td style="width: 35%; min-width: 7rem;">{{ paciente.nombre}} </td>
+                <td style="width: 35%; min-width: 8rem;">{{ paciente.telefono}} </td>
+                <td style="width: 15%;">
+                    <button pButton pRipple type="button" 
+                    icon="pi pi-search" 
+                    (click)="editPaciente(paciente)"
+                    class="p-button p-component p-button-text p-button-icon-only"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

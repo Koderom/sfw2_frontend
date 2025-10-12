@@ -37,7 +37,7 @@ export class Tratamiento {
   cols = [];
 
   tratamientoDialogVisible: boolean = false;
-  tratamientoSeleccionado: TratamientoDto = this.getDefaultTratamiento();;
+  tratamientoSeleccionado: TratamientoDto = this.getDefaultTratamiento();
   tratamientoSubmitted = signal(false);
 
   citaDialogVisible: boolean = false;

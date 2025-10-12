@@ -10,6 +10,10 @@ import { TratamientoDto } from '@/core/dtos/tratamiento.dto';
 import { TratamientoSerivce } from '@/core/services/tratamiento.service';
 import { DetailCita } from './datail-cita/detail-cita';
 import { DividerModule } from 'primeng/divider';
+import { Toast } from 'primeng/toast';
+import { Ripple } from 'primeng/ripple';
+import { MessageService } from 'primeng/api';
+import ToastMessage from '@/core/utils/ui/toast-message';
 
 interface Cita {
   titulo: string;
@@ -25,11 +29,15 @@ interface DiaCalendario {
 
 @Component({
   selector: 'app-citas-tratamiento',
-  imports: [CommonModule, PanelModule, ButtonModule, CardModule, DividerModule, DetailCita],
+  imports: [CommonModule, PanelModule, ButtonModule, CardModule, DividerModule, DetailCita, Toast
+  ],
   templateUrl: './citas-tratamiento.html',
-  styleUrl: './citas-tratamiento.scss'
+  styleUrl: './citas-tratamiento.scss',
+  providers: [MessageService]
 })
 export class CitasTratamiento {
+  constructor(private messageService: MessageService) {}
+
   @Input() tratamientoId:string = '';
   tratamiento = signal<TratamientoDto>(this.getDefaultTratamiento());
   tratamientoService = inject(TratamientoSerivce);
@@ -236,7 +244,7 @@ export class CitasTratamiento {
 
   /*
   *
-  * Dialg registro de citas
+  * Dialog registro de citas
   * 
   *  */
   citaDialogVisible = false;
@@ -255,10 +263,12 @@ export class CitasTratamiento {
         this.citaDialogVisible = false;
         this.citaSelected = this.getDefaultCita('');
 
+        ToastMessage.success(this.messageService, 'Registrado', [response.message]);
         this.ngOnInit();
       },
       error: error => {
-        console.log("error al craer cita...", error);
+        console.error("Guardar cita", error);
+        ToastMessage.exception(this.messageService, 'Citas', error);
       }
     });
   }

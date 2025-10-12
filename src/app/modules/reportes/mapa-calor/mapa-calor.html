@@ -1,6 +1,5 @@
 <p-panel  class="w-full md:w-auto h-full"  header="Mapa de Calor">
-  <google-map height="40rem" width="100%" [center]="center" [zoom]="zoom" [options]="mapOptions" (mapClick)="addMarker($event)">
-
+  <google-map height="50rem" width="100%" [center]="center" [zoom]="zoom" [options]="mapOptions" (mapClick)="addMarker($event)">
     <map-marker-clusterer>
     @for (markerPosition of markerPositions; track $index) {
       <map-advanced-marker [position]="markerPosition"/>

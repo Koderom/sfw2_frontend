@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { TratamientoDto } from '@/core/dtos/tratamiento.dto';
+import { LocalizacionTbDto } from '@/core/dtos/localizaciontb.dto';
 import { Button } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -45,6 +46,9 @@ export class DetailTratamiento {
   estadoTratamientoOptions = signal<EstadoTratamientoDto[]>([]);
   selectedEstadoTratamientoId = '';
 
+  localizacionTbOptions = signal<LocalizacionTbDto[]>([]);
+  selectedLocalizacionTbId = '';
+
   pacienteTratamientoOptions = signal<PacienteDto[]>([]);
   filteredPaciente: PacienteDto[] = [];
   selectedPacienteId : any;
@@ -53,6 +57,19 @@ export class DetailTratamiento {
     this.loadTipoTratamientoOptions();
     this.loadEstadoTratamientoOptions();
     this.loadPacienteTratamientoOptions();
+    this.loadLocalizacionTbOptions();
+  }
+
+  loadLocalizacionTbOptions(){
+    this.tratamientoService.getAllLocalizacionesTb().subscribe({
+      next: (response) => {
+        console.log('Localizaciones TB:', response);
+        this.localizacionTbOptions.set(response.data || []);
+        if(response.data && response.data.length > 0){
+          this.selectedLocalizacionTbId = response.data[0].id || '';
+        }
+      }
+    });
   }
 
   loadTipoTratamientoOptions(){
@@ -98,6 +115,7 @@ export class DetailTratamiento {
   onSave(){
     this.tratamiento.idTipoTratamiento = this.selectedTipoTratamientoId;
     this.tratamiento.idEstado = this.selectedEstadoTratamientoId;
+    this.tratamiento.idLocalizacionTb = this.selectedLocalizacionTbId;
     this.filteredPaciente = [];
     
     this.save.emit();

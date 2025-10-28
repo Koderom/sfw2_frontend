@@ -82,6 +82,8 @@ export class Tratamiento {
         this.tratamientoSubmitted.set(false);
         this.tratamientoSeleccionado = this.getDefaultTratamiento();
         this.tratamientoDialogVisible = false; 
+
+        this.loadTratamientos();
       }, 
       
       error: (error) => {

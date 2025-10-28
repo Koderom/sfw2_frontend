@@ -17,7 +17,6 @@ header="Datos del Tratamiento"
                   dropdown display="chip" 
                   (onSelect) = "onSelectPaciente($event)"
                   (completeMethod)="filterPaciente($event)" />
-                <small class="text-red-500" *ngIf="submitted && !tratamiento.paciente!.nombre">Name is required.</small>
             </div>
 
             <div >
@@ -40,6 +39,17 @@ header="Datos del Tratamiento"
                     optionValue="id" 
                     [(ngModel)]="selectedEstadoTratamientoId"
                     placeholder="Seleccione una opcion" fluid />
+            </div>
+
+            <div>
+                <label for="localizacion_tb" class="block font-bold mb-3">Localización de TB</label>
+                <p-select
+                    inputId="localizacion_tb" 
+                    [options]="localizacionTbOptions()" 
+                    optionLabel="descripcion" 
+                    optionValue="id" 
+                    [(ngModel)]="selectedLocalizacionTbId"
+                    placeholder="Seleccione una localización" fluid />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4">

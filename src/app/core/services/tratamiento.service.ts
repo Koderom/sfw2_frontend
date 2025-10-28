@@ -10,6 +10,7 @@ import { DireccionDto } from "../dtos/direccion.dto";
 import { TipoTratamientoDto } from "../dtos/tipotratamiento.dto";
 import { EstadoTratamientoDto } from "../dtos/estadotratamiento.dto";
 import { TratamientoDto } from "../dtos/tratamiento.dto";
+import { LocalizacionTbDto } from "../dtos/localizaciontb.dto";
 
 @Injectable({providedIn: 'root'})
 export class TratamientoSerivce{
@@ -45,5 +46,10 @@ export class TratamientoSerivce{
             headers: new HttpHeaders({'Content-Type': 'application/json'})
         };
         return this.http.post<ResponseDto<TratamientoDto[]>>(url, direccion, httpOptions);
+    }
+
+    getAllLocalizacionesTb(): Observable<ResponseDto<LocalizacionTbDto[]>>{
+        const url = `${this.apiUrl}/tratamiento/localizaciones`;
+        return this.http.get<ResponseDto<LocalizacionTbDto[]>>(url);
     }
 }

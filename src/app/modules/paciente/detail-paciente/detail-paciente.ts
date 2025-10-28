@@ -25,12 +25,14 @@ import {MapGeocoder} from '@angular/google-maps';
 import { ContactoPaciente } from '../contacto-paciente/contacto-paciente';
 import { Table, TableModule } from 'primeng/table';
 import { ContactoDto } from '@/core/dtos/contacto.dto';
+import { TabsModule } from 'primeng/tabs';
+import { Laboratorio } from '@/modules/laboratorio/laboratorio';
 
 @Component({
   selector: 'app-detail-paciente',
   imports: [CommonModule,InputTextModule, FluidModule, ButtonModule, SelectModule, FormsModule, TextareaModule,
     AccordionModule, FieldsetModule, DatePickerModule, InputNumberModule, CheckboxModule,GoogleMap, MapMarker, 
-    ContactoPaciente, TableModule],
+    ContactoPaciente, TableModule,TabsModule, Laboratorio],
   templateUrl: './detail-paciente.html',
   styleUrl: './detail-paciente.scss'
 })
@@ -69,6 +71,7 @@ export class DetailPaciente {
   marker = signal<google.maps.LatLngLiteral>(CentrosaludCaniadaDelCarmen);
 
   _direccionService = inject(DireccionSerivce);
+  activeIndex = 0;
 
   constructor( private geocoder: MapGeocoder){}
 

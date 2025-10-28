@@ -40,6 +40,18 @@ export class CitaSerivce{
         return this.http.get<ResponseDto<MotivoDto[]>>(url);
     }
 
+    crearMotivo(motivo: MotivoDto): Observable<ResponseDto<MotivoDto>>{
+        const url = `${this.apiUrl}/cita/motivo`;
+        const httpOptions = { headers: new HttpHeaders({'Content-Type': 'application/json'}) };
+        return this.http.post<ResponseDto<MotivoDto>>(url, motivo, httpOptions);
+    }
+
+    actualizarMotivo(id: string, motivo: MotivoDto): Observable<ResponseDto<MotivoDto>>{
+        const url = `${this.apiUrl}/cita/motivo/${id}`;
+        const httpOptions = { headers: new HttpHeaders({'Content-Type': 'application/json'}) };
+        return this.http.put<ResponseDto<MotivoDto>>(url, motivo, httpOptions);
+    }
+
     crearCitaTratamiento(cita: CitaDto): Observable<ResponseDto<CitaDto>>{
         console.log("creando cita...", cita);
 

@@ -1,0 +1,55 @@
+<p-dialog [(visible)]="visible" [style]="{ width: '450px' }" header="Laboratorio" [modal]="true" (onHide)="onCancel()" (onShow)="onDialogShow()">
+  <ng-template #content>
+    <div class="flex flex-col gap-6">
+      <div>
+        <label for="laboratorio_paciente" class="block font-bold mb-3">Paciente</label>
+        <p-autocomplete class="w-full" [(ngModel)]="selectedPacienteId" [suggestions]="filteredPaciente" optionLabel="nombre" placeholder="Search" dropdown display="chip" (onSelect)="onSelectPaciente($event)" (completeMethod)="filterPaciente($event)" />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div class="md:col-span-6">
+          <label for="codigo_lab" class="block font-bold mb-3">Codigo</label>
+          <input type="text" pInputText id="codigo_lab" [(ngModel)]="laboratorio.codigo" required autofocus fluid />
+        </div>
+        <div class="md:col-span-6">
+          <label for="fecha_lab" class="block font-bold mb-3">Fecha</label>
+          <p-datepicker class="w-full" [(ngModel)]="laboratorio.fecha" [iconDisplay]="'input'" [showIcon]="true" inputId="fecha_lab" appendTo="body" />
+        </div>
+
+      </div>
+
+      <div>
+        <label for="tipo_control" class="block font-bold mb-3">Tipo de Control</label>
+        <p-select appendTo="body" inputId="tipo_control" [options]="tipoControlOptions()" optionLabel="descripcion" optionValue="id" [(ngModel)]="selectedTipoControlId" placeholder="Seleccione una opción" fluid />
+      </div>
+
+      <div>
+        <label for="tipo_laboratorio" class="block font-bold mb-3">Tipo de Laboratorio</label>
+        <p-select inputId="tipo_laboratorio" [options]="tipoLaboratorioOptions()" optionLabel="descripcion" optionValue="id" [(ngModel)]="selectedTipoLaboratorioId" (onChange)="onTipoLaboratorioChange($event.value)" placeholder="Seleccione una opción" fluid />
+      </div>
+      <div>
+        <label class="block font-bold mb-3">Resultado del Laboratorio</label>
+        <div class="flex flex-col gap-2">
+
+          <div class="flex flex-col gap-4">
+            <div *ngFor="let resultado of tipoResultadoOptions()" class="field-checkbox">
+              <p-radiobutton [inputId]="resultado.id" name="tipoResultado" [value]="resultado.id" [(ngModel)]="selectedTipoResultadoId" />
+              <label [for]="resultado.id" class="ml-2">
+                {{ resultado.descripcion }}</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div>
+        <label for="observaciones_lab" class="block font-bold mb-3">Observaciones</label>
+        <textarea pTextarea class="w-full" [(ngModel)]="laboratorio.observacion" id="observaciones_lab" rows="4"></textarea>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #footer>
+    <p-button label="Cancel" icon="pi pi-times" text (click)="onCancel()" />
+    <p-button label="Save" icon="pi pi-check" (click)="onSave()" />
+  </ng-template>
+</p-dialog>

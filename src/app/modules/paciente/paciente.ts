@@ -33,6 +33,10 @@ import { CentrosaludCaniadaDelCarmen } from '@/core/utils/location/constants';
 import { ZonaMzDto } from '@/core/dtos/zonaMz.dto';
 import { switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LaboratorioDto } from '@/core/dtos/laboratorio.dto';
+import { LaboratorioDetail } from '../laboratorio/laboratorio-detail/laboratorio-detail';
+import { TabsModule } from 'primeng/tabs';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @Component({
@@ -41,7 +45,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     CommonModule,TableModule,FormsModule,ButtonModule,RippleModule,ToastModule,ToolbarModule,
     RatingModule,InputTextModule,TextareaModule,SelectModule,RadioButtonModule,InputNumberModule,
     DialogModule,TagModule,InputIconModule,IconFieldModule,ConfirmDialogModule,DatePickerModule,
-    CheckboxModule,GoogleMap, MapMarker],
+    CheckboxModule,GoogleMap, MapMarker, TabsModule, MultiSelectModule],
   templateUrl: './paciente.html',
   styleUrl: './paciente.scss',
   providers: [MessageService]
@@ -59,6 +63,10 @@ export class Paciente {
   zonasUv = signal<ZonaUvDto[]>([]);
   zonasMz = signal<ZonaMzDto[]>([]);
   selectedPacientes!: PacienteDto[] | null;
+
+  enfermedadesLista: any[] = [];
+  sintomasLista: any[] = [];
+  activeIndex = 0;
 
   submitted: boolean = false;
   pacienteDialog: boolean = false;
@@ -87,42 +95,57 @@ export class Paciente {
   }
 
   loadData(){
-    
     this.generos = [
       { label: 'Hombre', value: 1 },
-        { label: 'Mujer', value: 2 }
-      ];
-      
-      this.cols = [
-        { field: 'nombre', header: 'Nombre', customExportHeader: 'Product Code' },
-        { field: 'telefono', header: 'Telefono' }
-      ];
-      
-      this._pacienteSevice.getAllPacientes().subscribe({
-          next: (resp) =>{
-            this.pacientes.set(resp.data);
-          }
-      });
+      { label: 'Mujer', value: 2 }
+    ];
+    this.cols = [
+      { field: 'nombre', header: 'Nombre', customExportHeader: 'Product Code' },
+      { field: 'telefono', header: 'Telefono' }
+    ];
+    this._pacienteSevice.getAllPacientes().subscribe({
+      next: (resp) =>{
+        this.pacientes.set(resp.data);
+      }
+    });
+    this.paciente = this.getDefaultPaciente();
+    this.direccion = this.getDefaultDireccion();
+  }
+
+  loadEnfermedades() {
+    this._pacienteSevice.getAllEnfermedades().subscribe({
+      next: (resp) => {
+        this.enfermedadesLista = (resp.data || []).map(e => ({ ...e, checked: false }));
+      }
+    });
+  }
+
+  loadSintomas() {
+    this._pacienteSevice.getAllSintomas().subscribe({
+      next: (resp) => {
+        this.sintomasLista = (resp.data || []).map(s => ({ ...s, checked: false }));
+      }
+    });
+  }
+
+  onEnfermedadCheck(enf: any) {
+    this.paciente.enfermedades = this.enfermedadesLista.filter(e => e.checked);
+  }
+
+  onSintomaCheck(sint: any) {
+    this.paciente.sintomas = this.sintomasLista.filter(s => s.checked);
   }
 
   openNew() {
-    this.paciente = {
-      nombre: '',
-      numero_doc: '',
-      tipo_doc: 1,
-      fecha_nacimiento: undefined,
-      genero: 1,
-      email: '',
-      tiene_whatsapp: false,
-      telefono: undefined,
-      estado: true,
-    };
+    this.paciente = this.getDefaultPaciente();
+    this.loadEnfermedades();
+    this.loadSintomas();
     this.resetDireccion();
-    this.loadZonasUv()
-    this.loadMyLocation()
-    
+    this.loadZonasUv();
+    this.loadMyLocation();
     this.submitted = false;
     this.pacienteDialog = true;
+    this.activeIndex = 0;
   }
 
   hideDialog() {
@@ -248,5 +271,27 @@ export class Paciente {
 
     this.direccion.latitud = currentPosition.lat;
     this.direccion.longitud = currentPosition.lng;
+  }
+
+  getDefaultPaciente(): PacienteDto {
+    return {
+      nombre: '',
+      numero_doc: '',
+      tipo_doc: 1,
+      fecha_nacimiento: undefined,
+      genero: 1,
+      email: '',
+      tiene_whatsapp: false,
+      telefono: undefined,
+      estado: true,
+      enfermedades: [],
+      sintomas: []
+    };
+  }
+
+  getDefaultDireccion(): DireccionDto {
+    return {
+      descripcion: ''
+    }
   }
 }

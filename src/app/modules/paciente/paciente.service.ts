@@ -7,6 +7,8 @@ import { PacienteDto } from "@/core/dtos/paciente.dto";
 import { PacienteDetailDto } from "@/core/dtos/pacientedetail.dto";
 import { ParentescoDto } from "@/core/dtos/parentesco.dto";
 import { ContactoDto } from "@/core/dtos/contacto.dto";
+import { EnfermedadDto } from "@/core/dtos/enfermedad.dto";
+import { SintomaDto } from "@/core/dtos/sintoma.dto";
 
 @Injectable({providedIn: 'root'})
 export class PacienteService{
@@ -65,5 +67,49 @@ export class PacienteService{
     getAllTipoParentesco(): Observable<ResponseDto<ParentescoDto[]>> {
         const url = `${this.apiUrl}/paciente/tipo-parentesco`;
         return this.http.get<ResponseDto<ParentescoDto[]>>(url);
+    }
+
+    // Enfermedades
+    getAllEnfermedades(): Observable<ResponseDto<EnfermedadDto[]>> {
+        const url = `${this.apiUrl}/paciente/enfermedad`;
+        return this.http.get<ResponseDto<EnfermedadDto[]>>(url);
+    }
+
+    crearEnfermedad(enfermedad: EnfermedadDto): Observable<ResponseDto<EnfermedadDto>> {
+        const url = `${this.apiUrl}/paciente/enfermedad`;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        return this.http.post<ResponseDto<EnfermedadDto>>(url, enfermedad, httpOptions);
+    }
+
+    actualizarEnfermedad(id: string, enfermedad: EnfermedadDto): Observable<ResponseDto<EnfermedadDto>> {
+        const url = `${this.apiUrl}/paciente/enfermedad/${id}`;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        return this.http.put<ResponseDto<EnfermedadDto>>(url, enfermedad, httpOptions);
+    }
+
+    // Síntomas
+    getAllSintomas(): Observable<ResponseDto<SintomaDto[]>> {
+        const url = `${this.apiUrl}/paciente/sintoma`;
+        return this.http.get<ResponseDto<SintomaDto[]>>(url);
+    }
+
+    crearSintoma(sintoma: SintomaDto): Observable<ResponseDto<SintomaDto>> {
+        const url = `${this.apiUrl}/paciente/sintoma`;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        return this.http.post<ResponseDto<SintomaDto>>(url, sintoma, httpOptions);
+    }
+
+    actualizarSintoma(id: string, sintoma: SintomaDto): Observable<ResponseDto<SintomaDto>> {
+        const url = `${this.apiUrl}/paciente/sintoma/${id}`;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        return this.http.put<ResponseDto<SintomaDto>>(url, sintoma, httpOptions);
     }
 }

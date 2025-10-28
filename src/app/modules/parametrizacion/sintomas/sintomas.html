@@ -1,0 +1,65 @@
+<div class="p-4">
+	<div class="flex items-center justify-between mb-2">
+		<h4 class="m-0">Síntomas</h4>
+	</div>
+
+	<p-table [value]="sintomas()" [loading]="loading()" [paginator]="true" [rows]="10">
+		<ng-template pTemplate="header">
+			<tr>
+				<th style="min-width: 4rem" >#</th>
+				<th style="min-width: 30rem">Descripción</th>
+				<th style="min-width: 10rem">Estado</th>
+				<th style="min-width: 15rem">Acciones</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-s let-ri="rowIndex">
+			<tr>
+				<td>{{ ri + 1 }}</td>
+				<td>
+					<ng-container *ngIf="editIndex() === ri; else viewDesc">
+						<input style="min-width: 30rem" pInputText [(ngModel)]="editSintoma.descripcion" />
+					</ng-container>
+					<ng-template #viewDesc>
+						{{ s.descripcion }}
+					</ng-template>
+				</td>
+				<td>
+					<ng-container *ngIf="editIndex() === ri; else viewEstado">
+						<input type="checkbox" [(ngModel)]="editSintoma.estado" />
+						<span class="ml-2">{{ editSintoma.estado ? 'Activo' : 'Inactivo' }}</span>
+					</ng-container>
+					<ng-template #viewEstado>
+						<span>{{ s.estado ? 'Activo' : 'Inactivo' }}</span>
+					</ng-template>
+				</td>
+				<td>
+					<ng-container *ngIf="editIndex() === ri; else actionBtns">
+						<p-button label="Guardar" icon="pi pi-check" (onClick)="saveEdit(ri)" class="mr-2" />
+						<p-button label="Cancelar" icon="pi pi-times" (onClick)="cancelEdit()" class="p-button-text" />
+					</ng-container>
+					<ng-template #actionBtns>
+						<p-button [rounded]="true" [outlined]="true" icon="pi pi-pencil" class="mr-2" (onClick)="startEdit(ri)" />
+					</ng-template>
+				</td>
+			</tr>
+		</ng-template>
+		<ng-template #footer>
+				<tr class="p-datatable-tbody">
+			<td>
+				{{ sintomas().length + 1 }}
+			</td>
+			<td>
+				<input pInputText [(ngModel)]="newSintoma.descripcion" placeholder="Nuevo síntoma" />
+			</td>
+			<td>
+				<input type="checkbox" [(ngModel)]="newSintoma.estado" />
+				<span class="ml-2">
+					{{ newSintoma.estado ? 'Activo' : 'Inactivo' }}</span>
+			</td>
+			<td>
+				<p-button label="Agregar" icon="pi pi-plus" (onClick)="saveNew()" [disabled]="!newSintoma.descripcion || newSintoma.descripcion.trim().length === 0" />
+			</td>
+		</tr>
+		</ng-template>
+	</p-table>
+</div>

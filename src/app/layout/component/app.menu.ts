@@ -27,7 +27,8 @@ export class AppMenu {
             {
                 label: 'Pacientes',
                 items: [
-                    { label: 'Gestionar Pacientes', icon: 'pi pi-users', routerLink: ['/pacientes'] }
+                    { label: 'Gestionar Pacientes', icon: 'pi pi-users', routerLink: ['/pacientes'] },
+                    { label: 'Laboratorios', icon: 'pi pi-book', routerLink: ['/laboratorio'] }
                 ]                
             },
             {
@@ -40,6 +41,12 @@ export class AppMenu {
                 label: 'Reportes',
                 items: [
                     { label: 'Mapa de Calor', icon: 'pi pi-map', routerLink: ['/reportes/mapa-calor'] }
+                ]                
+            },
+            {
+                label: 'Parametrizción',
+                items: [
+                    { label: 'General', icon: 'pi pi-cog', routerLink: ['/parametrizacion'] }
                 ]                
             },
             // {

@@ -25,7 +25,8 @@ export const appRoutes: Routes = [
             { path: 'pacientes', loadChildren: () => import('./app/modules/paciente/paciente.routes')},
             { path: 'tratamientos', loadChildren: () => import('./app/modules/tratamiento/tratamiento.routes')},
             { path: 'reportes', loadChildren: () => import('./app/modules/reportes/reportes.routes')},
-
+            { path: 'laboratorio', loadChildren: () => import('./app/modules/laboratorio/laboratorio.routes')},
+            { path: 'parametrizacion', loadChildren: () => import('./app/modules/parametrizacion/parametrizacion.routes')},
         ]
     },
     { path: 'landing', component: Landing },

@@ -68,115 +68,149 @@
             <td>{{ paciente.telefono }}</td>
             <td>
                 <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editPaciente(paciente)" />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(paciente)" />
+                <!-- <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(paciente)" /> -->
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="pacienteDialog" [style]="{ width: '450px' }" header="Datos del Paciente" [modal]="true">
-    <ng-template #content>
-        <div class="flex flex-col gap-6">
-            <div>
-                <label for="name" class="block font-bold mb-3">Nombre</label>
-                <input type="text" pInputText id="name" [(ngModel)]="paciente.nombre" required autofocus fluid />
-                <small class="text-red-500" *ngIf="submitted && !paciente.nombre">Name is required.</small>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-                <div class="md:col-span-6">
-                    <label for="numero_doc" class="block font-bold mb-3">CI</label>
-                    <input type="text" pInputText id="numero_doc" [(ngModel)]="paciente.numero_doc" />
+<p-dialog [(visible)]="pacienteDialog" [style]="{ width: '650px' }" header="Registro de Paciente" [modal]="true">
+    <p-tabs [(value)]="activeIndex">
+        <p-tablist>
+        <p-tab [value]="0">Datos Generales</p-tab>
+        <p-tab [value]="1">Enfermedades y Sintomas</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel [value]="0">
+                <div class="flex flex-col gap-6">
+                    <!-- ...datos generales igual que antes... -->
+                    <div>
+                        <label for="name" class="block font-bold mb-3">Nombre</label>
+                        <input type="text" pInputText id="name" [(ngModel)]="paciente.nombre" required autofocus fluid />
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                        <div class="md:col-span-6">
+                            <label for="numero_doc" class="block font-bold mb-3">CI</label>
+                            <input type="text" pInputText id="numero_doc" [(ngModel)]="paciente.numero_doc" />
+                        </div>
+                        <div class="md:col-span-6">
+                            <label for="telefono" class="block font-bold mb-3">Telefono</label>
+                            <p-inputnumber id="telefono" [(ngModel)]="paciente.telefono" [useGrouping]="false" fluid />
+                        </div>
+                    </div>
+                    <div>
+                        <label for="fecha_nacimiento" class="block font-bold mb-3">Fecha de Nacimiento</label>
+                        <p-datepicker 
+                            [(ngModel)]="paciente.fecha_nacimiento" 
+                            [iconDisplay]="'input'" 
+                            [showIcon]="true" 
+                            inputId="fecha_nacimiento"
+                            appendTo="body" />
+                    </div>
+                    <div>
+                        <label for="genero" class="block font-bold mb-3">Genero</label>
+                        <p-select [(ngModel)]="paciente.genero" inputId="genero" [options]="generos" optionLabel="label" optionValue="value" placeholder="seleccionar genero" fluid />
+                    </div>
+                    <div>
+                        <label for="email" class="block font-bold mb-3">Correo Electronico</label>
+                        <input type="text" pInputText id="email" [(ngModel)]="paciente.email" required autofocus fluid />
+                    </div>
+                    <div>
+                        <p-checkbox
+                            inputId="has_whatsapp" 
+                            [(ngModel)]="paciente.tiene_whatsapp" 
+                            [binary]="true" class="mr-2"></p-checkbox>
+                        <label for="has_whatsapp" >Tiene whatsApp</label>
+                    </div>
+                    <div>
+                        <label  class="block font-bold mb-3">Ubicacion del paciente</label>
+                        <google-map 
+                            height="15rem"
+                            width="100%"
+                            [center]="center" 
+                            [zoom]="zoom"
+                            [options]="mapOptions"
+                            (mapClick)="addMarker($event)">
+                            <map-marker [position]="marker()"></map-marker>
+                        </google-map>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                        <div class="md:col-span-4">
+                            <label for="direccion" class="block font-bold mb-3">Direccion</label>
+                            <input type="text" pInputText id="direccion" [(ngModel)]="direccion.descripcion" required autofocus fluid />
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="nro_casa" class="block font-bold mb-3">Nro Casa</label>
+                            <p-inputnumber id="nro_casa" [(ngModel)]="direccion.nro_casa" [useGrouping]="false" fluid />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-12 gap-4">
+                        <div  class="col-span-12">
+                            <label for="zona_uv" class="block font-bold mb-3">Zona UV</label>
+                            <p-select
+                                inputId="zona_uv" 
+                                [options]="zonasUv()" 
+                                optionLabel="descripcion" 
+                                optionValue="id" 
+                                (onChange)="onZonaUvChange($event)"
+                                placeholder="Seleccione una zona UV" fluid />
+                        </div>
+                        <div class="col-span-12">
+                            <label for="zona_mz" class="block font-bold mb-3">Manzano</label>
+                            <p-select
+                                [(ngModel)]="direccion.idMza"
+                                inputId="zona_mz" 
+                                [options]="zonasMz()" 
+                                optionLabel="descripcion" 
+                                optionValue="id"
+                                class="w-full"
+                                placeholder="Seleccione una zona Mz" fluid />
+                        </div>
+                    </div>
                 </div>
-                <div class="md:col-span-6">
-                    <label for="telefono" class="block font-bold mb-3">Telefono</label>
-                    <p-inputnumber id="telefono" [(ngModel)]="paciente.telefono" [useGrouping]="false" fluid />
+            </p-tabpanel>
+            <p-tabpanel [value]="1">
+                <div class="flex flex-col gap-6">
+                    <div>
+                        <label class="block font-bold mb-3">Enfermedades de Base</label>
+                        <div class="flex flex-wrap">
+                            <ng-container *ngFor="let enf of enfermedadesLista">
+                                <div class="m-2 w-60">
+                                    <p-checkbox
+                                    [inputId]="'enf_' + enf.id"
+                                    [binary]="true"
+                                    [(ngModel)]="enf.checked"
+                                    (ngModelChange)="onEnfermedadCheck(enf)"
+                                    ></p-checkbox>
+                                    <label [for]="'enf_' + enf.id" class="ml-2">{{ enf.descripcion }}</label>
+                                </div>
+                                
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-3">Síntomas Respiratorios</label>
+                        <div class="flex flex-wrap">
+                            <ng-container *ngFor="let sint of sintomasLista">
+                                <div class="m-2 w-60"> 
+                                    <p-checkbox
+                                        [inputId]="'sint_' + sint.id"
+                                        [binary]="true"
+                                        [(ngModel)]="sint.checked"
+                                        (ngModelChange)="onSintomaCheck(sint)"
+                                    ></p-checkbox>
+                                    <label [for]="'sint_' + sint.id" class="ml-2">{{ sint.descripcion }}</label>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div>
-                <label for="fecha_nacimiento" class="block font-bold mb-3">Fecha de Nacimiento</label>
-                <p-datepicker 
-                    [(ngModel)]="paciente.fecha_nacimiento" 
-                    [iconDisplay]="'input'" 
-                    [showIcon]="true" 
-                    inputId="fecha_nacimiento"
-                    appendTo="body" />
-            </div>
-
-            <div>
-                <label for="genero" class="block font-bold mb-3">Genero</label>
-                <p-select [(ngModel)]="paciente.genero" inputId="genero" [options]="generos" optionLabel="label" optionValue="value" placeholder="seleccionar genero" fluid />
-            </div>
-
-            <div>
-                <label for="email" class="block font-bold mb-3">Correo Electronico</label>
-                <input type="text" pInputText id="email" [(ngModel)]="paciente.email" required autofocus fluid />
-            </div>
-
-            <div>
-                <p-checkbox
-                    inputId="has_whatsapp" 
-                    [(ngModel)]="paciente.tiene_whatsapp" 
-                    [binary]="true" class="mr-2"></p-checkbox>
-                <label for="has_whatsapp" >Tiene whatsApp</label>
-            </div>
-
-            <div>
-                <label  class="block font-bold mb-3">Ubicacion del paciente</label>
-                <google-map 
-                    height="15rem"
-                    width="100%"
-                    [center]="center" 
-                    [zoom]="zoom"
-                    [options]="mapOptions"
-                    (mapClick)="addMarker($event)">
-                    <!-- <map-marker *ngFor="let marker of markers" [position]="marker"></map-marker> -->
-                     <map-marker [position]="marker()"></map-marker>
-                </google-map>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
-                <div class="md:col-span-4">
-                    <label for="direccion" class="block font-bold mb-3">Direccion</label>
-                    <input type="text" pInputText id="direccion" [(ngModel)]="direccion.descripcion" required autofocus fluid />
-                </div>
-
-                <div class="md:col-span-2">
-                    <label for="nro_casa" class="block font-bold mb-3">Nro Casa</label>
-                    <p-inputnumber id="nro_casa" [(ngModel)]="direccion.nro_casa" [useGrouping]="false" fluid />
-                </div>
-            </div>
-            
-
-            <div class="grid grid-cols-12 gap-4">
-                <div  class="col-span-12">
-                    <label for="zona_uv" class="block font-bold mb-3">Zona UV</label>
-                    <p-select
-                        inputId="zona_uv" 
-                        [options]="zonasUv()" 
-                        optionLabel="descripcion" 
-                        optionValue="id" 
-                        (onChange)="onZonaUvChange($event)"
-                        placeholder="Seleccione una zona UV" fluid />
-                </div>
-                <div class="col-span-12">
-                    <label for="zona_mz" class="block font-bold mb-3">Manzano</label>
-                    <p-select
-                        [(ngModel)]="direccion.idMza"
-                        inputId="zona_mz" 
-                        [options]="zonasMz()" 
-                        optionLabel="descripcion" 
-                        optionValue="id"
-                        class="w-full"
-                        placeholder="Seleccione una zona Mz" fluid />
-                </div>
-            </div>
-        </div> 
-    </ng-template>
-
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+    
     <ng-template #footer>
         <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
         <p-button label="Save" icon="pi pi-check" (click)="savePaciente()" />
     </ng-template>
 </p-dialog>
-

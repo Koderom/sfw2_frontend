@@ -1,5 +1,8 @@
+import { Sintomas } from "@/modules/parametrizacion/sintomas/sintomas";
 import { ContactoDto } from "./contacto.dto";
 import { DireccionDto } from "./direccion.dto";
+import { EnfermedadDto } from "./enfermedad.dto";
+import { SintomaDto } from "./sintoma.dto";
 
 export interface PacienteDto {
     id?: string;
@@ -14,4 +17,7 @@ export interface PacienteDto {
     estado?: boolean;
     contactos?: ContactoDto[];
     direccion?: DireccionDto;
+
+    enfermedades?: EnfermedadDto[];
+    sintomas?: SintomaDto[];
 }

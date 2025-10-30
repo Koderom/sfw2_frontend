@@ -1,0 +1,17 @@
+<div class="col-span-12 lg:col-span-6 xl:col-span-3">
+  <div class="card mb-0">
+    <div class="flex justify-between mb-4">
+      <div>
+        <span class="block text-muted-color font-medium mb-4">{{incidencia.descripcion}}</span>
+        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{incidencia.valor}}</div>
+      </div>
+      <div class="flex items-center justify-center rounded-border" [ngClass]="'bg-' + (incidencia.color || 'orange') + '-100 dark:bg-' + (incidencia.color || 'orange') + '-400/10'" style="width: 2.5rem; height: 2.5rem">
+        <i class="pi" [ngClass]="[incidencia.icono || 'pi-chart-bar', 'text-' + (incidencia.color || 'orange') + '-500', 'text-xl!']"></i>
+      </div>
+    </div>
+    <ng-container *ngIf="incidencia.incremento">
+      <span class="text-primary font-medium">{{incidencia.incremento}}% </span>
+      <span class="text-muted-color">desde la semana pasada</span>
+    </ng-container>
+  </div>
+</div>

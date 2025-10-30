@@ -8,6 +8,8 @@ import { PacienteDetailDto } from "@/core/dtos/pacientedetail.dto";
 import { ParentescoDto } from "@/core/dtos/parentesco.dto";
 import { ContactoDto } from "@/core/dtos/contacto.dto";
 import { CitaDto } from "../dtos/cita.dto";
+import { IncidenciaTbDto } from "../dtos/incidencias-tb.dto";
+
 
 @Injectable({providedIn: 'root'})
 export class MonitoreoService{
@@ -27,4 +29,8 @@ export class MonitoreoService{
         return this.http.get<ResponseDto<CitaDto[]>>(url);
     }
 
+    getIndicadoresEvaluacion(): Observable<ResponseDto<IncidenciaTbDto[]>> {
+        const url = `${this.apiUrl}/monitoreo/indicadores-evaluacion`;
+        return this.http.get<ResponseDto<IncidenciaTbDto[]>>(url);
+    }
 }

@@ -1,5 +1,7 @@
 <div class="grid grid-cols-12 gap-8">
-    <app-stats-widget class="contents" />
+        <ng-container *ngFor="let inc of indicadores">
+            <app-stat-widget [incidencia]="inc" class="contents"></app-stat-widget>
+        </ng-container>
     <div class="col-span-12 xl:col-span-6">
         <app-pacientes-pendientes-widget />
         <app-pacientes-recientes-widget />

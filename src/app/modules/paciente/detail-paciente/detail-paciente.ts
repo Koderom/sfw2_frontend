@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, Signal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FluidModule } from 'primeng/fluid';
@@ -43,6 +43,7 @@ export class DetailPaciente {
   contactosPacinetes = signal<ContactoDto[]>([]);
 
   paciente!: PacienteDto;
+  idPaciente = signal<string>('');
   direccion!: DireccionDto;
 
   dropdownItems = [
@@ -80,6 +81,8 @@ export class DetailPaciente {
 
     this.route.paramMap.subscribe(params => {
       const idPaciente = params.get('id');
+      this.idPaciente.set(idPaciente || '');
+      
       if (idPaciente) {
         this.pacienteService.getPacicienteById(idPaciente).pipe(
           tap(res => console.log("getPacicienteById:", res)),

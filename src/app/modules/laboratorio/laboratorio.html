@@ -2,6 +2,9 @@
     <ng-template #start>
         <p-button label="Nuevo laboratorio" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="newLaboratorio()"/>
     </ng-template>
+    <ng-template #end>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary"  (onClick)="exportCSV()"/>
+    </ng-template>
 </p-toolbar>
 
 <p-table #dt 
@@ -10,22 +13,39 @@
   [paginator]="true"
   [tableStyle]="{ 'min-width': '75rem' }"
   [rowHover]="true" dataKey="id"
+  [globalFilterFields]="['paciente.nombre', 'codigo', 'fecha', 'tipoLaboratorio.descripcion', 'tipoControl.descripcion', 'tipoResultado.descripcion']"
   currentPageReportTemplate="mostrando {first} a {last} de {totalRecords} resultados"
   [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 20, 30]">
 
   <ng-template #caption>
     <div class="flex items-center justify-between">
       <h5 class="m-0">Lista de Laboratorios</h5>
+      <p-iconfield>
+          <p-inputicon styleClass="pi pi-search" />
+          <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
+      </p-iconfield>
     </div>
   </ng-template>
   <ng-template #header>
     <tr>
-      <th style="width: 3rem">Paciente</th>
-      <th style="min-width: 16rem">Código</th>
-      <th style="min-width: 12rem">Fecha</th>
-      <th style="min-width: 12rem">Tipo de Laboratorio</th>
-      <th style="min-width: 12rem">Tipo de Control</th>
-      <th style="min-width: 12rem">Tipo de Resultado</th>
+      <th pSortableColumn="paciente.nombre" style="min-width: 12rem">Paciente
+        <p-sortIcon field="paciente" />
+      </th>
+      <th pSortableColumn="codigo" style="min-width: 10rem">Código
+        <p-sortIcon field="codigo" />
+      </th>
+      <th pSortableColumn="fecha" style="min-width: 12rem">Fecha
+        <p-sortIcon field="fecha" />
+      </th>
+      <th pSortableColumn="tipoLaboratorio.descripcion" style="min-width: 12rem">Tipo de Laboratorio
+        <p-sortIcon field="tipoLaboratorio" />
+      </th>
+      <th pSortableColumn="tipoControl.descripcion" style="min-width: 12rem">Tipo de Control
+        <p-sortIcon field="tipoControl" />
+      </th>
+      <th pSortableColumn="tipoResultado.descripcion" style="min-width: 12rem">Tipo de Resultado
+        <p-sortIcon field="tipoResultado" />
+      </th>
       <th style="min-width: 12rem"></th>
     </tr>
   </ng-template>
@@ -33,8 +53,7 @@
     <tr>
       <td>{{ lab.paciente?.nombre }}</td>
       <td>{{ lab.codigo }}</td>
-      <!-- <td>{{ lab.fecha | date: 'shortDate' }}</td> -->
-      <td>{{ lab.fecha}}</td>
+      <td>{{ lab.fecha | date:'dd/MM/yyyy'}}</td>
       <td>{{ lab.tipoLaboratorio?.descripcion }}</td>
       <td>{{ lab.tipoControl?.descripcion }}</td>
       <td>{{ lab.tipoResultado?.descripcion }}</td>

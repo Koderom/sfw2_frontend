@@ -5,7 +5,7 @@
     </ng-template>
 
     <ng-template #end>
-        <p-button label="Export" icon="pi pi-upload" severity="secondary"/>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary"  (onClick)="exportCSV()"/>
     </ng-template>
 </p-toolbar>
 
@@ -15,7 +15,7 @@
     [rows]="10"
     [columns]="cols"
     [paginator]="true"
-    [globalFilterFields]="['nombre', 'telefono', 'numero_doc', 'email']"
+    [globalFilterFields]="['paciente.nombre', 'estado.descripcion', 'tipo_tratamiento.descripcion', 'fecha_inicio', 'fecha_fin']"
     [tableStyle]="{ 'min-width': '75rem' }"
     [(selection)]="selectedTratamientos"
     [rowHover]="true"
@@ -38,20 +38,20 @@
             <th style="width: 3rem">
                 <p-tableHeaderCheckbox />
             </th>
-            <th pSortableColumn="nombre" style="min-width: 16rem">Paciente
+            <th pSortableColumn="paciente.nombre" style="min-width: 16rem">Paciente
                 <p-sortIcon field="nombre" />
             </th>
-            <th pSortableColumn="numero_doc" style="min-width: 10rem">Tipo
-                <p-sortIcon field="numero_doc" />
+            <th pSortableColumn="estado.descripcion" style="min-width: 10rem">Estado
+                <p-sortIcon field="estado" />
             </th>
-            <th pSortableColumn="numero_doc" style="min-width: 10rem">Estado
-                <p-sortIcon field="numero_doc" />
+            <th pSortableColumn="tipo_tratamiento.descripcion" style="min-width: 10rem">Tipo
+                <p-sortIcon field="tipo_tratamiento" />
             </th>
-            <th pSortableColumn="fecha_nacimiento" style="min-width: 10rem">Fecha Inicio
-                <p-sortIcon field="fecha_nacimiento" />
+            <th pSortableColumn="fecha_inicio" style="min-width: 10rem">Fecha Inicio
+                <p-sortIcon field="fecha_inicio" />
             </th>
-            <th pSortableColumn="email" style="min-width: 10rem">Fecha Fin
-                <p-sortIcon field="email" />
+            <th pSortableColumn="fecha_fin" style="min-width: 10rem">Fecha Fin
+                <p-sortIcon field="fecha_fin" />
             </th>
             <th style="min-width: 15rem"></th>
         </tr>

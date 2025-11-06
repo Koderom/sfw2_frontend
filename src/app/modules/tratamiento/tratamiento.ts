@@ -1,6 +1,6 @@
 import { TratamientoDto } from '@/core/dtos/tratamiento.dto';
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -16,6 +16,7 @@ import { CitaDto } from '@/core/dtos/cita.dto';
 import { ConfirmationService } from 'primeng/api';
 import { CitaSerivce } from '@/core/services/cita.service';
 import { Toast } from 'primeng/toast';
+import { ExportExcel } from '@/core/utils/reports/ExportExcel';
 
 @Component({
   selector: 'app-tratamiento',
@@ -43,9 +44,24 @@ export class Tratamiento {
   citaDialogVisible: boolean = false;
   citaSelected!: CitaDto;
   citaSubmitted = signal(false);
+  
+  @ViewChild('dt') dt!: Table;
 
   ngOnInit(){
     this.loadTratamientos();
+  }
+
+  exportCSV() {
+      let data = this.dt.value.map( (item: TratamientoDto) => {
+        const {id,paciente, tipo_tratamiento, estado, ...campos} = item
+        return {
+          ...campos,
+          paciente: paciente?.nombre,
+          tipo_tratamiento: tipo_tratamiento?.descripcion,
+          estado_tratamiento: estado?.descripcion
+        }
+      });
+      ExportExcel.export(data, 'Tratamientos');
   }
 
   loadTratamientos(){

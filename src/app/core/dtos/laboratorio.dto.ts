@@ -2,6 +2,7 @@ import { Paciente } from "@/modules/paciente";
 import { TipoControlDto } from "./tipocontrol.dto";
 import { TipoLaboratorioDto } from "./tipolaboratorio.dto";
 import { TipoResultadoDto } from "./tiporesultado.dto";
+import { PacienteDto } from "./paciente.dto";
 
 export interface LaboratorioDto {
     id? : string;
@@ -17,5 +18,5 @@ export interface LaboratorioDto {
     tipoLaboratorio? : TipoLaboratorioDto;
     tipoControl? : TipoControlDto;
     tipoResultado? : TipoResultadoDto;
-    paciente?: Paciente;
+    paciente?: PacienteDto;
 }

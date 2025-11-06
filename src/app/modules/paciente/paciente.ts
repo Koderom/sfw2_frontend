@@ -37,6 +37,8 @@ import { LaboratorioDto } from '@/core/dtos/laboratorio.dto';
 import { LaboratorioDetail } from '../laboratorio/laboratorio-detail/laboratorio-detail';
 import { TabsModule } from 'primeng/tabs';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ExportExcel } from '@/core/utils/reports/ExportExcel';
+
 
 
 @Component({
@@ -94,14 +96,30 @@ export class Paciente {
     this.loadData();
   }
 
+  exportCSV() {
+      let data = this.dt.value.map( (item: PacienteDto) => {
+        const {id, fecha_nacimiento, tiene_whatsapp, genero, ...campos} = item
+        return {
+          ...campos,
+          fecha_nacimiento : item.fecha_nacimiento ? new Date(item.fecha_nacimiento).toLocaleDateString() : '',
+          genero: genero === 1 ? 'Hombre' : 'Mujer',
+          tiene_whatsapp: item.tiene_whatsapp ? 'Si' : 'No',
+        }
+      });
+      ExportExcel.export(data, 'pacientes');
+  }
+
   loadData(){
     this.generos = [
       { label: 'Hombre', value: 1 },
       { label: 'Mujer', value: 2 }
     ];
     this.cols = [
-      { field: 'nombre', header: 'Nombre', customExportHeader: 'Product Code' },
-      { field: 'telefono', header: 'Telefono' }
+      { field: 'nombre', header: 'Nombre'},
+      { field: 'numero_doc', header: 'CI'},
+      { field: 'fecha_nacimiento', header: 'Fecha Nacimiento'},
+      { field: 'email', header: 'Email'},
+      { field: 'telefono', header: 'Telefono'},
     ];
     this._pacienteSevice.getAllPacientes().subscribe({
       next: (resp) =>{

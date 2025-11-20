@@ -64,3 +64,14 @@ $env:EDITOR_BASE_URL="https://a19e431b4e3d.ngrok-free.app/"
 verificar: Get-ChildItem Env:EDITOR_BASE_URL
 $env:WEBHOOK_URL="https://a19e431b4e3d.ngrok-free.app/"
 Get-ChildItem Env:WEBHOOK_URL
+
+## para realizar cambios en el servidor
+cd ~/sfw2_frontend
+git pull
+npm install
+ng build --configuration production
+sudo systemctl restart nginx
+
+docker exec -it seguimiento-backend npm run build
+docker-compose down -v
+docker-compose up --build -d

@@ -75,10 +75,15 @@ export class Laboratorio implements OnInit {
 
   onSaveLaboratorio(){
     console.log("Guardando laboratorio: ", this.laboratorioSeleccionado);
+    this.laboratorioService.crearLaboratorioPaciente(this.laboratorioSeleccionado).subscribe({
+      next: (response) => {
+        console.log("Laboratorio creado: ", response);
+        this.cargarLaboratorios();    
+      } 
+    });
     this.laboratorioDialogVisible = false;
     this.laboratorioSeleccionado = {};
     this.laboratorioSubmitted.set(false);
-    this.cargarLaboratorios();
   }
 
   onCancelDialogLaboratorio(){

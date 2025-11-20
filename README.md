@@ -60,7 +60,7 @@ For more information on using the Angular CLI, including detailed command refere
 
 
 ## Configurar n8n local
-$env:EDITOR_BASE_URL="https://e3c7c4ef6dd1.ngrok-free.app/"
+$env:EDITOR_BASE_URL="https://a19e431b4e3d.ngrok-free.app/"
 verificar: Get-ChildItem Env:EDITOR_BASE_URL
-$env:WEBHOOK_URL="https://e3c7c4ef6dd1.ngrok-free.app/"
+$env:WEBHOOK_URL="https://a19e431b4e3d.ngrok-free.app/"
 Get-ChildItem Env:WEBHOOK_URL

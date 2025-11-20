@@ -9,10 +9,11 @@ import { ToastModule } from 'primeng/toast';
 
 import { CitaSerivce } from '@/core/services/cita.service';
 import { MotivoDto } from '@/core/dtos/motivo.dto';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
   selector: 'app-motivos',
-  imports: [CommonModule, ButtonModule, TableModule, DialogModule, InputTextModule, FormsModule, ToastModule],
+  imports: [CommonModule, ButtonModule, TableModule, DialogModule, InputTextModule, FormsModule, ToastModule, PanelModule],
   templateUrl: './motivos.html',
   styleUrl: './motivos.scss'
 })

@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
 import ToastMessage from '@/core/utils/ui/toast-message';
 
 interface Cita {
+  id: string;
   titulo: string;
   hora: string;
   estado?: string;
@@ -158,6 +159,7 @@ export class CitasTratamiento {
       if (citasPorDia[key] && disponible) {
         // Mostrar todas las citas reales de ese día
         citas = citasPorDia[key].map(cita => ({
+          id : cita.id!,
           titulo: cita.tipo?.descripcion || 'Cita',
           hora: cita.fecha_actual ? new Date(cita.fecha_actual).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : '',
           estado: cita.estado?.descripcion || ''
@@ -165,9 +167,9 @@ export class CitasTratamiento {
       } else if (disponible) {
         // No hay cita registrada para este día
         if (fecha < hoy) {
-          citas = [{ titulo: 'Sin cita', hora: '', estado: 'Perdido' }];
+          citas = [{ id: '', titulo: 'Sin cita', hora: '', estado: 'Perdido' }];
         } else {
-          citas = [{ titulo: 'Sin cita', hora: '', estado: 'Programado' }];
+          citas = [{ id: '', titulo: 'Sin cita', hora: '', estado: 'Programado' }];
         }
       }
       this.diasDelMes.push({ fecha: new Date(fecha), citas, disponible });
@@ -285,5 +287,16 @@ export class CitasTratamiento {
     }
     this.citaSubmitted.set(true);
     this.citaDialogVisible = true;
+  }
+
+  onEditCita(cita: Cita){
+    if(cita.id === '') return;
+    this.citaService.getcitaById(cita.id).subscribe({
+      next: response => {
+        this.citaSelected = response.data!; 
+        this.citaSubmitted.set(true);
+        this.citaDialogVisible = true;
+      }
+    });
   }
 }

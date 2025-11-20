@@ -68,39 +68,13 @@ export class DetailCita {
 
   onDialogShow(){
     if(this.cita.id){
-      this.tipoCitaSelected = this.cita.idTipo || '';
-      this.estadoCitaSelected = this.cita.idEstado || '';
+      console.log("Cita cargada en detalle:", this.cita);
+      this.tipoCitaSelected = this.cita.tipo!.id || '';
+      this.estadoCitaSelected = this.cita.estado!.id || '';
     }else{
       this.cita.idTipo = this.tipoCitaSelected;
       this.cita.idEstado = this.estadoCitaSelected;
     }
-  }
-
-  loadtipoCitaOptions(){
-    this.citaService.getAllTipoCita().subscribe({
-      next: (response) => {
-        if(response.data){
-          let citas = response.data;
-          this.tipoCitaOptions.set(response.data);
-          this.tipoCitaSelected = citas[0].id  || ''
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching tipoCita options:', error);
-      }
-    });
-  }
-
-  loadEstadoCitaOptions(){
-    this.citaService.getAllEstadoCita().subscribe({
-      next: (response) => {
-        if(response.data){
-          let estados = response.data;
-          this.estadoCitaOptions.set(response.data);
-          this.estadoCitaSelected = estados[0].id  || ''
-        }
-      }
-    });
   }
 
   onEstadoCitaChange(event: SelectChangeEvent){
@@ -130,5 +104,31 @@ export class DetailCita {
       }
     });
   }
-  
+
+  loadEstadoCitaOptions(){
+    this.citaService.getAllEstadoCita().subscribe({
+      next: (response) => {
+        if(response.data){
+          let estados = response.data;
+          this.estadoCitaOptions.set(response.data);
+          this.estadoCitaSelected = estados[0].id  || ''
+        }
+      }
+    });
+  }
+
+    loadtipoCitaOptions(){
+    this.citaService.getAllTipoCita().subscribe({
+      next: (response) => {
+        if(response.data){
+          let citas = response.data;
+          this.tipoCitaOptions.set(response.data);
+          this.tipoCitaSelected = citas[0].id  || ''
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching tipoCita options:', error);
+      }
+    });
+  }
 }

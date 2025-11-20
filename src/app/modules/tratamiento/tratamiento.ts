@@ -67,6 +67,7 @@ export class Tratamiento {
   loadTratamientos(){
     this.tratamientoService.getAllTratamientos().subscribe({
       next: (response) => {
+        console.log("getAllTratamientos", response)
         this.tratamientos.set(response.data || []);
       }
     });

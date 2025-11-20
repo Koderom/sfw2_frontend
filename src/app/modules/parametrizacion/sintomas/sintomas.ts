@@ -8,10 +8,11 @@ import { ToastModule } from 'primeng/toast';
 
 import { SintomaDto } from '@/core/dtos/sintoma.dto';
 import { PacienteService } from '@/modules/paciente/paciente.service';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
   selector: 'app-sintomas',
-  imports: [CommonModule, ButtonModule, TableModule, InputTextModule, FormsModule, ToastModule],
+  imports: [CommonModule, ButtonModule, TableModule, InputTextModule, FormsModule, ToastModule, PanelModule],
   templateUrl: './sintomas.html',
   styleUrl: './sintomas.scss'
 })

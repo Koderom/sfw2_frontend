@@ -61,4 +61,9 @@ export class CitaSerivce{
         };
         return this.http.post<ResponseDto<CitaDto>>(url, cita, httpOptions);
     }
+
+    getcitaById(citaId: string): Observable<ResponseDto<CitaDto>>{
+        const url = `${this.apiUrl}/cita/${citaId}`;
+        return this.http.get<ResponseDto<CitaDto>>(url);
+    }
 }

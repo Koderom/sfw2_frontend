@@ -8,10 +8,11 @@ import { ToastModule } from 'primeng/toast';
 
 import { EnfermedadDto } from '@/core/dtos/enfermedad.dto';
 import { PacienteService } from '@/modules/paciente/paciente.service';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
   selector: 'app-enfermedades',
-  imports: [CommonModule, ButtonModule, TableModule, InputTextModule, FormsModule, ToastModule],
+  imports: [CommonModule, ButtonModule, TableModule, InputTextModule, FormsModule, ToastModule, PanelModule],
   templateUrl: './enfermedades.html',
   styleUrl: './enfermedades.scss'
 })

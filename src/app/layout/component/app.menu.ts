@@ -8,12 +8,7 @@ import { AppMenuitem } from './app.menuitem';
     selector: 'app-menu',
     standalone: true,
     imports: [CommonModule, AppMenuitem, RouterModule],
-    template: `<ul class="layout-menu">
-        <ng-container *ngFor="let item of model; let i = index">
-            <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
-            <li *ngIf="item.separator" class="menu-separator"></li>
-        </ng-container>
-    </ul> `
+    templateUrl: './app.menu.html'
 })
 export class AppMenu {
     model: MenuItem[] = [];
@@ -25,7 +20,15 @@ export class AppMenu {
                 items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
             },
             {
+<<<<<<< HEAD
                 label: 'Pacientes',
+=======
+                label: 'Gestion de Pacientes',
+                items: [{ label: 'Pacientes', icon: 'pi pi-fw pi-users', routerLink: ['/pacientes'] }]
+            },
+            {
+                label: 'UI Components',
+>>>>>>> af3899ae474d70adb3e05724b380f04881d3d62c
                 items: [
                     { label: 'Gestionar Pacientes', icon: 'pi pi-users', routerLink: ['/pacientes'] },
                     { label: 'Laboratorios', icon: 'pi pi-book', routerLink: ['/laboratorio'] }

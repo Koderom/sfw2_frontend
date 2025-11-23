@@ -1,0 +1,181 @@
+<p-dialog 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [style]="{width: '450px'}"
+    [header]="user ? 'Editar Usuario' : 'Nuevo Usuario'"
+    [draggable]="false" 
+    [resizable]="false"
+    (onHide)="hideDialog()"
+    class="p-fluid">
+    
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="flex flex-col gap-6">
+            <!-- Nombre de Usuario -->
+            <div class="field">
+                <label for="username" class="block text-900 font-medium mb-2">
+                    Nombre de Usuario <span class="text-red-500">*</span>
+                </label>
+                <div class="p-input-icon-right w-full">
+                    <!-- <i class="pi pi-user"></i> -->
+                    <input 
+                        type="text" 
+                        pInputText 
+                        id="username" 
+                        formControlName="username"
+                        [class.ng-dirty]="form.get('username')?.touched && form.get('username')?.invalid"
+                        placeholder="Ingrese el nombre de usuario"
+                        class="w-full" />
+                </div>
+                <small class="p-error block mt-1" *ngIf="form.get('username')?.touched && form.get('username')?.errors?.['required']">
+                    El nombre de usuario es requerido
+                </small>
+                <small class="p-error block mt-1" *ngIf="form.get('username')?.touched && form.get('username')?.errors?.['minlength']">
+                    El nombre de usuario debe tener al menos 3 caracteres
+                </small>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="field">
+                <label for="contrasena" class="block text-900 font-medium mb-2">
+                    Contraseña <span class="text-red-500">*</span>
+                </label>
+                <p-password 
+                    id="contrasena" 
+                    formControlName="contrasena"
+                    [toggleMask]="true"
+                    [feedback]="true"
+                    [strongRegex]="'^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$'"
+                    weakLabel="Débil"
+                    mediumLabel="Media"
+                    strongLabel="Fuerte"
+                    promptLabel="Ingrese una contraseña"
+                    [class.ng-dirty]="form.get('contrasena')?.touched && form.get('contrasena')?.invalid"
+                    placeholder="Ingrese la contraseña"
+                    styleClass="w-full">
+                </p-password>
+                <small class="p-error block mt-1" *ngIf="form.get('contrasena')?.touched && form.get('contrasena')?.errors?.['required']">
+                    La contraseña es requerida
+                </small>
+                <small class="p-error block mt-1" *ngIf="form.get('contrasena')?.touched && form.get('contrasena')?.errors?.['minlength']">
+                    La contraseña debe tener al menos 6 caracteres
+                </small>
+            </div>
+
+            <div class="field">
+                <label for="correo" class="block text-900 font-medium mb-2">
+                    Correo Electronico <span class="text-red-500">*</span>
+                </label>
+                <div class="p-input-icon-right w-full">
+                    <!-- <i class="pi pi-user"></i> -->
+                    <input 
+                        type="text" 
+                        pInputText 
+                        id="correo" 
+                        formControlName="correo"
+                        [class.ng-dirty]="form.get('correo')?.touched && form.get('correo')?.invalid"
+                        placeholder="Ingrese el nombre de usuario"
+                        class="w-full" />
+                </div>
+                <small class="p-error block mt-1" *ngIf="form.get('correo')?.touched && form.get('correo')?.errors?.['required']">
+                    El correo es requerido
+                </small>
+            </div>
+
+            <div class="field-checkbox">
+                <p-checkbox
+                    formControlName="notificar_email"
+                    [binary]="true"
+                    inputId="notificar_email">
+                </p-checkbox>
+                <label for="notificar_email" class="ml-2">Recibir notificaciones por Correo</label>
+            </div>
+
+            <div class="field">
+                <label for="telefono" class="block text-900 font-medium mb-2">
+                    Telefono <span class="text-red-500">*</span>
+                </label>
+                <div class="p-input-icon-right w-full">
+                    <!-- <i class="pi pi-user"></i> -->
+                    <input 
+                        type="text" 
+                        pInputText 
+                        id="telefono" 
+                        formControlName="telefono"
+                        [class.ng-dirty]="form.get('telefono')?.touched && form.get('telefono')?.invalid"
+                        placeholder="Ingrese el nombre de usuario"
+                        class="w-full" />
+                </div>
+                <small class="p-error block mt-1" *ngIf="form.get('telefono')?.touched && form.get('telefono')?.errors?.['required']">
+                    El telefono es requerido
+                </small>
+            </div>
+
+            <div class="field-checkbox">
+                <p-checkbox
+                    formControlName="notificar_whatsapp"
+                    [binary]="true"
+                    inputId="notificar_whatsapp">
+                </p-checkbox>
+                <label for="notificar_whatsapp" class="ml-2">Recibir notificaciones por whatsApp</label>
+            </div>
+
+            <!-- Rol -->
+            <div class="field">
+              <label for="rolId" class="block text-900 font-medium mb-2">
+                Rol <span class="text-red-500">*</span>
+              </label>
+              <p-select 
+                id="rolId" 
+                formControlName="rolId" 
+                [options]="roles" 
+                optionLabel="descripcion" 
+                optionValue="id" 
+                placeholder="Seleccione un rol" 
+                [class.ng-dirty]="form.get('rolId')?.touched && form.get('rolId')?.invalid" 
+                [style]="{'width': '100%'}" 
+                styleClass="w-full"
+                appendTo="body">
+
+                <ng-template pTemplate="selectedItem" let-role>
+                  <div class="flex align-items-center">
+                    <i class="pi pi-user-edit mr-2"></i>
+                    <span>
+                      {{ role?.descripcion }}</span>
+                  </div>
+                </ng-template>
+              </p-select>
+              <small class="p-error block mt-1" *ngIf="form.get('rolId')?.touched && form.get('rolId')?.invalid">
+                El rol es requerido
+              </small>
+            </div>
+
+            <!-- Estado -->
+            <div class="field-checkbox">
+                <p-checkbox
+                    formControlName="estado"
+                    [binary]="true"
+                    inputId="estado">
+                </p-checkbox>
+                <label for="estado" class="ml-2">Usuario Habilitado</label>
+            </div>
+        </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-end gap-2">
+            <p-button 
+                icon="pi pi-times" 
+                label="Cancelar" 
+                (onClick)="hideDialog()" 
+                [text]="true" 
+                severity="secondary">
+            </p-button>
+            <p-button 
+                icon="pi pi-check" 
+                label="Guardar" 
+                (onClick)="onSubmit()"
+                [loading]="loading">
+            </p-button>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -75,3 +75,6 @@ sudo systemctl restart nginx
 docker exec -it seguimiento-backend npm run build
 docker-compose down -v
 docker-compose up --build -d
+
+https://n8n-service-axadhhayhpdpdbhz.centralus-01.azurewebsites.net/webhook/b727a688-7624-4054-943e-39ab560693cd
+https://n8n-service-axadhhayhpdpdbhz.centralus-01.azurewebsites.net/webhook/b727a688-7624-4054-943e-39ab560693cd

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PanelControl } from './panel-control';
+import { MotivoNoVisita } from './motivo-no-visita';
 
-describe('PanelControl', () => {
-  let component: PanelControl;
-  let fixture: ComponentFixture<PanelControl>;
+describe('MotivoNoVisita', () => {
+  let component: MotivoNoVisita;
+  let fixture: ComponentFixture<MotivoNoVisita>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PanelControl]
+      imports: [MotivoNoVisita]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PanelControl);
+    fixture = TestBed.createComponent(MotivoNoVisita);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

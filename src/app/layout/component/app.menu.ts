@@ -44,7 +44,8 @@ export class AppMenu {
             {
                 label: 'Reportes',
                 items: [
-                    { label: 'Mapa de Calor', icon: 'pi pi-map', routerLink: ['/reportes/mapa-calor'] }
+                    { label: 'Mapa de Calor', icon: 'pi pi-map', routerLink: ['/reportes/mapa-calor'] },
+                    { label: 'Riesgo de Abandono', icon: 'pi pi-chart-line', routerLink: ['/reportes/riesgo-abandono'] }
                 ]                
             },
             {

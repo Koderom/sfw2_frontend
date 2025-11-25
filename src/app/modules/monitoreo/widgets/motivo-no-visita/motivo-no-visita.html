@@ -1,0 +1,11 @@
+<div class="card mb-8!">
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <div class="font-semibold text-xl">Motivos de No Visita</div>
+            <div class="text-sm text-muted-color">Total citas: <strong>{{ totalCitas }}</strong></div>
+        </div>
+    </div>
+    <div style="height: 240px">
+        <p-chart type="bar" [data]="chartData" [options]="chartOptions" class="h-full" />
+    </div>
+</div>

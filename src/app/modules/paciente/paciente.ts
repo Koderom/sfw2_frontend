@@ -37,7 +37,9 @@ import { LaboratorioDto } from '@/core/dtos/laboratorio.dto';
 import { LaboratorioDetail } from '../laboratorio/laboratorio-detail/laboratorio-detail';
 import { TabsModule } from 'primeng/tabs';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ChatPaciente } from './components/chat-paciente/chat-paciente';
 import { ExportExcel } from '@/core/utils/reports/ExportExcel';
+import { LoaderService } from '@/core/utils/ui/loader.service';
 
 
 
@@ -47,7 +49,7 @@ import { ExportExcel } from '@/core/utils/reports/ExportExcel';
     CommonModule,TableModule,FormsModule,ButtonModule,RippleModule,ToastModule,ToolbarModule,
     RatingModule,InputTextModule,TextareaModule,SelectModule,RadioButtonModule,InputNumberModule,
     DialogModule,TagModule,InputIconModule,IconFieldModule,ConfirmDialogModule,DatePickerModule,
-    CheckboxModule,GoogleMap, MapMarker, TabsModule, MultiSelectModule],
+    CheckboxModule,GoogleMap, MapMarker, TabsModule, MultiSelectModule, ChatPaciente],
   templateUrl: './paciente.html',
   styleUrl: './paciente.scss',
   providers: [MessageService]
@@ -70,6 +72,10 @@ export class Paciente {
   sintomasLista: any[] = [];
   activeIndex = 0;
 
+  // Chat paciente
+  chatVisible: boolean = false;
+  chatPhone?: string | number | undefined;
+
   submitted: boolean = false;
   pacienteDialog: boolean = false;
 
@@ -90,7 +96,7 @@ export class Paciente {
   zoom = 18;
   marker = signal<google.maps.LatLngLiteral>(CentrosaludCaniadaDelCarmen)
 
-  constructor(private service: MessageService, private geocoder: MapGeocoder) {}
+  constructor(private service: MessageService, private geocoder: MapGeocoder, private loaderService: LoaderService) {}
 
   ngOnInit() {
     this.loadData();
@@ -110,6 +116,8 @@ export class Paciente {
   }
 
   loadData(){
+    this.loaderService.show();
+
     this.generos = [
       { label: 'Hombre', value: 1 },
       { label: 'Mujer', value: 2 }
@@ -124,6 +132,7 @@ export class Paciente {
     this._pacienteSevice.getAllPacientes().subscribe({
       next: (resp) =>{
         this.pacientes.set(resp.data);
+        this.loaderService.hide();
       }
     });
     this.paciente = this.getDefaultPaciente();
@@ -218,6 +227,15 @@ export class Paciente {
     console.log('paciente-detail');
     console.log(paciente);
     this._router.navigate(['detail-paciente', paciente.id], {relativeTo: this._route});
+  }
+
+  openChat(telefono: string | number | undefined) {
+    if (!telefono) {
+      this.service.add({severity: 'warn', summary: 'Teléfono', detail: 'Paciente no tiene número de teléfono'} as any);
+      return;
+    }
+    this.chatPhone = telefono;
+    this.chatVisible = true;
   }
 
   deleteProduct(paciente: PacienteDto){

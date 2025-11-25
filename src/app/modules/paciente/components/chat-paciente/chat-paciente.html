@@ -1,0 +1,26 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '520px' }" header="Historial de Conversación" (onHide)="close()">
+	<ng-template #content>
+		<div class="flex flex-col gap-4">
+			<div *ngIf="loading" class="p-3">Cargando mensajes...</div>
+
+			<div *ngIf="!loading && mensajes.length === 0" class="p-3 text-center text-muted-color">
+				No se tuvieron conversaciones en las últimas 3 horas.
+			</div>
+
+			<div *ngIf="!loading && mensajes.length > 0" class="p-3 overflow-y-auto" style="max-height: 50vh;">
+				<div *ngFor="let m of mensajes" class="mb-3">
+					<div [ngClass]="{'text-right': m.role === 'assistant', 'text-left': m.role !== 'assistant'}">
+						<div [style.display]="'inline-block'" [ngStyle]="m.role === 'assistant' ? {'background':'#e6f4ff','padding':'8px','border-radius':'8px'} : {'background':'#f3f3f3','padding':'8px','border-radius':'8px'}">
+							<div class="text-sm">{{ m.content }}</div>
+							<div class="text-xs text-muted-color mt-1">{{ m.timestamp ? (m.timestamp | date:'dd/MM/yyyy HH:mm') : '' }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+
+	<ng-template #footer>
+		<p-button label="Cerrar" icon="pi pi-times" (onClick)="close()" />
+	</ng-template>
+</p-dialog>

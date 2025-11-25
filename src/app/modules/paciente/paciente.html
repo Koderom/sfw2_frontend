@@ -67,7 +67,8 @@
             <td>{{ paciente.email }}</td>
             <td>{{ paciente.telefono }}</td>
             <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editPaciente(paciente)" />
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="false" [outlined]="true" (click)="editPaciente(paciente)" />
+                <p-button icon="pi pi-envelope" class="mr-2" severity="info" [rounded]="false" [outlined]="true" (click)="openChat(paciente.telefono)" />
                 <!-- <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(paciente)" /> -->
             </td>
         </tr>
@@ -214,3 +215,6 @@
         <p-button label="Save" icon="pi pi-check" (click)="savePaciente()" />
     </ng-template>
 </p-dialog>
+
+<!-- Chat paciente dialog component -->
+<app-chat-paciente [(visible)]="chatVisible" [telefono]="chatPhone"></app-chat-paciente>

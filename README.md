@@ -69,7 +69,7 @@ Get-ChildItem Env:WEBHOOK_URL
 cd ~/sfw2_frontend
 git pull
 npm install
-ng build --configuration production
+sudo ng build --configuration production
 sudo systemctl restart nginx
 
 docker exec -it seguimiento-backend npm run build

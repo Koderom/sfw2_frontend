@@ -7,15 +7,17 @@ import { AppSidebar } from './app.sidebar';
 import { AppFooter } from './app.footer';
 import { LayoutService } from '../service/layout.service';
 import { LoaderSpinner } from '@/core/components/loader-spinner/loader-spinner';
+import { Toast } from 'primeng/toast';
 
 @Component({
     selector: 'app-layout',
     standalone: true,
-    imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter, LoaderSpinner],
+    imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter, LoaderSpinner, Toast],
     template: `<div class="layout-wrapper" [ngClass]="containerClass">
         <app-topbar></app-topbar>
         <app-sidebar></app-sidebar>
         <div class="layout-main-container">
+            <p-toast></p-toast>
             <div class="layout-main">
                 <router-outlet></router-outlet>
             </div>

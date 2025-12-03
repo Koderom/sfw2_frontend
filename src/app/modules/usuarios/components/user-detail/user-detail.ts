@@ -97,7 +97,6 @@ export class UserDetail implements OnChanges {
   createForm(): FormGroup {
     return this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
-      contrasena: ['', [Validators.required, Validators.minLength(6)]],
       rolId: ['', Validators.required],
       correo: ['', Validators.required],
       telefono: ['', Validators.required],

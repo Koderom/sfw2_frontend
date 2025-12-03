@@ -54,6 +54,8 @@ export class UserTable implements OnInit {
     this.loading = true;
     this.userService.getAllUsers().subscribe({
       next: (users) => {
+        console.log("usuarios", users);
+        
         this.users = users.data.map(userdto => new User(userdto));
         this.loading = false;
       },

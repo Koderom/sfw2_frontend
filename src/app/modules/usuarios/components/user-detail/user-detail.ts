@@ -68,19 +68,28 @@ export class UserDetail implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log('user -> dialog:', this.user);
     if (changes['user'] && this.user) {
       this.form.patchValue({
         username: this.user.username,
         contrasena: '',
         rolId: this.user.rol.id,
-        estado: this.user.estado
+        correo: this.user.email,
+        telefono: this.user.telefono,
+        estado: this.user.estado,
+        notificar_email: this.user.notificarEmail,
+        notificar_whatsapp: this.user.notificarWhatsapp
       });
     } else if (changes['user'] && !this.user) {
       this.form.reset({
         username: '',
         contrasena: '',
         rolId: '',
-        estado: true
+        correo: '',
+        telefono: '',
+        estado: true,
+        notificar_email: true,
+        notificar_whatsapp: true
       });
     }
   }

@@ -40,10 +40,23 @@ export class MonitoreoService{
         const httpOptions = {
             headers: new HttpHeaders({'Content-Type': 'application/json'})
         };
-        return this.http.post<ResponseDto<MotivoNoVisitaDto>>(url,{fecha_inicio :"01-11-2025", fecha_fin:"11-11-2025"}, httpOptions);
+        return this.http.post<ResponseDto<MotivoNoVisitaDto>>(url,{fecha_inicio :"2025-12-01", fecha_fin:"2025-12-31"}, httpOptions);
     }
-    getRiesgoAbandonoReporte(): Observable<ResponseDto<RiesgoAbandonoDto[]>> {
+    getRiesgoAbandonoReporte(fechaInicio: Date, fechaFin: Date): Observable<ResponseDto<RiesgoAbandonoDto[]>> {
         const url = `${this.apiUrl}/monitoreo/riesgo-abandono`;
-        return this.http.get<ResponseDto<RiesgoAbandonoDto[]>>(url);
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+        };
+        // Formatear fechas a YYYY-MM-DD
+        const formatDate = (date: Date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+        return this.http.post<ResponseDto<RiesgoAbandonoDto[]>>(url, {
+            fecha_inicio: formatDate(fechaInicio),
+            fecha_fin: formatDate(fechaFin)
+        }, httpOptions);
     }
 }

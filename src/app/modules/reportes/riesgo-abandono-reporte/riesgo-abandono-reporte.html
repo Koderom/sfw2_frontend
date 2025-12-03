@@ -4,6 +4,24 @@
       <h5 class="text-2xl font-bold mb-4">Reporte de Riesgo de Abandono</h5>
       <p class="text-muted-color mb-6">Algoritmo de Dispersión - Pacientes bajo monitoreo</p>
 
+      <!-- Selector de Rango de Fechas -->
+      <div class="card mb-6">
+        <h6 class="font-semibold mb-4">Rango de Fechas</h6>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-end">
+          <div>
+            <label class="block text-sm font-semibold mb-2">Fecha Inicio</label>
+            <p-datepicker [(ngModel)]="fechaInicio" [minDate]="minDate" [maxDate]="maxDate" dateFormat="yy-mm-dd" placeholder="Seleccionar fecha inicio" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-2">Fecha Fin</label>
+            <p-datepicker [(ngModel)]="fechaFin" [minDate]="minDate" [maxDate]="maxDate" dateFormat="yy-mm-dd" placeholder="Seleccionar fecha fin" />
+          </div>
+          <div>
+            <p-button label="Filtrar" icon="pi pi-search" (onClick)="loadReport()" [loading]="loading" />
+          </div>
+        </div>
+      </div>
+
       <!-- Gráfico -->
       <div class="card mb-6">
         <h6 class="font-semibold mb-4">Distribución de Riesgo de Abandono</h6>

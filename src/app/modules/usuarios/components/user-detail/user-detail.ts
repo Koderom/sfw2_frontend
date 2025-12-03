@@ -72,7 +72,7 @@ export class UserDetail implements OnChanges {
     if (changes['user'] && this.user) {
       this.form.patchValue({
         username: this.user.username,
-        contrasena: '',
+        contrasena: this.user.contrasena,
         rolId: this.user.rol.id,
         correo: this.user.email,
         telefono: this.user.telefono,

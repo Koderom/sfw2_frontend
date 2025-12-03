@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { CardModule } from 'primeng/card';
@@ -8,6 +9,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
+import { DatePickerModule } from 'primeng/datepicker';
+import { ButtonModule } from 'primeng/button';
 import { MonitoreoService } from '@/core/services/monitoreo.service';
 import { RiesgoAbandonoDto } from '@/core/dtos/riesgo-abandono.dto';
 import { LayoutService } from '@/layout/service/layout.service';
@@ -16,7 +19,7 @@ import { debounceTime, Subscription } from 'rxjs';
 @Component({
   selector: 'app-riesgo-abandono-reporte',
   standalone: true,
-  imports: [CommonModule, TableModule, ChartModule, CardModule, SkeletonModule, InputIconModule, IconFieldModule, InputTextModule, TagModule],
+  imports: [CommonModule, FormsModule, TableModule, ChartModule, CardModule, SkeletonModule, InputIconModule, IconFieldModule, InputTextModule, TagModule, DatePickerModule, ButtonModule],
   templateUrl: './riesgo-abandono-reporte.html',
   styleUrl: './riesgo-abandono-reporte.scss'
 })
@@ -29,18 +32,30 @@ export class RiesgoAbandonoReporte implements OnInit, OnDestroy {
   chartData: any;
   chartOptions: any;
   
+  fechaInicio: Date | null = null;
+  fechaFin: Date | null = null;
+  minDate: Date = new Date(new Date().getFullYear(), 0, 1);
+  maxDate: Date = new Date();
+  
   subscription!: Subscription;
 
   ngOnInit(): void {
+    this.initializeDateRange();
     this.loadReport();
     this.subscription = this.layoutService.configUpdate$.pipe(debounceTime(25)).subscribe(() => {
       this.initChart();
     });
   }
 
+  initializeDateRange(): void {
+    const now = new Date();
+    this.fechaFin = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    this.fechaInicio = new Date(now.getFullYear(), now.getMonth(), 1);
+  }
+
   loadReport(): void {
     this.loading = true;
-    this.monitoreoService.getRiesgoAbandonoReporte().subscribe({
+    this.monitoreoService.getRiesgoAbandonoReporte(this.fechaInicio || new Date(), this.fechaFin || new Date()).subscribe({
       next: (resp: any) => {
         this.reportData = resp.data || [];
         this.loading = false;
@@ -169,6 +184,14 @@ export class RiesgoAbandonoReporte implements OnInit, OnDestroy {
     if (score > 0.5) return 'Alto';
     if (score > 0.25) return 'Moderado';
     return 'Bajo';
+  }
+
+  formatDateToString(date: Date | null): string {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   ngOnDestroy(): void {
